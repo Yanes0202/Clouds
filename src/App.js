@@ -1,9 +1,9 @@
 import './App.css';
-import Header from './components/header/Header';
-import Feed from './Feed';
-import Login from './components/pages/Login';
-import { useStateValue } from './StateProvider';
-
+import Header from './components/pages/main/header/Header';
+import Feed from './components/pages/main/posts/Feed';
+import Login from './components/pages/login/Login';
+import { useStateValue } from './components/context/StateProvider';
+import CreatePostPopUp from './components/pages/main/posts/CreatePostPopUp';
 
 function App() {
   const [{user}] = useStateValue();
@@ -17,8 +17,9 @@ function App() {
       ) : (
 
         <>
+        
           <Header />
-
+          
           <div className="app_body">
 
             <div className="app_left">
@@ -32,6 +33,7 @@ function App() {
             </div>
 
           </div>
+          
         </>
 
       )}

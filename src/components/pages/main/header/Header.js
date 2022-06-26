@@ -7,11 +7,12 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import "./Header.css";
-import { useStateValue } from "../../StateProvider";
+import { useStateValue } from "../../../context/StateProvider";
 
 function Header() {
     const[{user}] = useStateValue();
 
+    const logOut=() => {  }
   return (
     <div className="header">
         <div className="header_left">
@@ -41,7 +42,7 @@ function Header() {
             <div className="header_option">
                 <NotificationsActiveIcon fontSize="large"/>
             </div>
-            <div className="header_option">
+            <div className="header_option" onClick={logOut}>
                 <ExpandMoreIcon fontSize="large"/>
             </div>
         </div>

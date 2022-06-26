@@ -1,13 +1,17 @@
 .comment {
     display: flex;
     flex-direction: column;
-    padding-top: 8px;
+    padding-top: 15px;
     padding-left: 8px;
-    padding-bottom: 8px;
 }
 
 .comment_top {
     display: flex;   
+}
+
+.comment_top > .MuiAvatar-root {
+    width: 30px;
+    height: 30px;
 }
 
 .comment_top > .MuiAvatar-root:hover {
@@ -27,15 +31,11 @@
     background-color: rgba(42, 46, 46, 0.63);
 }
 
-
 .comment_option {
     display: flex;
     font-size: 12px;
     padding-left: 10px;
 }
-
-
-
 
 .option_buttons {
     margin-right: 5px;
@@ -44,4 +44,30 @@
 
 .option_buttons:hover {
     text-decoration: underline;
+}
+
+.comment_create_reply {
+    padding-top: 8px;
+    padding-left: 8px;
+    padding-bottom: 8px;
+    display: none;
+    align-items: center;
+}
+
+.comment_create_reply > form > input{
+    outline-width: 0;
+    border: none;
+    padding: 5px 15px;
+    margin: 0 10px;
+    border-radius: 999px;
+    background-color: #eff2f5;
+}
+
+.comment_create_reply > .MuiAvatar-root {
+    width: 30px;
+    height: 30px;
+}
+
+.comment_create_reply > .MuiAvatar-root:hover {
+    filter: brightness(1.1);
 }

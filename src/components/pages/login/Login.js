@@ -2,10 +2,10 @@ import React from "react";
 import "./Login.css";
 import CloudIcon from "@mui/icons-material/Cloud";
 import Button from "@mui/material/Button";
-import { auth } from "../../firebase.js";
+import { auth } from "../../context/firebase.js";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { actionTypes } from "../../reducer";
-import { useStateValue } from "../../StateProvider";
+import { actionTypes } from "../../context/reducer";
+import { useStateValue } from "../../context/StateProvider";
 
 function Login() {
     const [state, dispatch] = useStateValue();

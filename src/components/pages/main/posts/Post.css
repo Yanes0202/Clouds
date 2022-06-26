@@ -41,7 +41,6 @@
 
 .post_options {
     border-top: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
     display: flex;
     justify-content: space-evenly;
     font-size: medium;
@@ -76,14 +75,14 @@
 }
 
 .post_comments {
-    display: flex;
+    display: none;
     flex-direction: column;
 }
 
 .post_create_comment {
-    padding-top: 8px;
+    padding-top: 15px;
     padding-left: 8px;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
     display: flex;
     align-items: center;
 }
@@ -91,10 +90,15 @@
 .post_create_comment > form > input{
     outline-width: 0;
     border: none;
-    padding: 5px 20px;
+    padding: 5px 15px;
     margin: 0 10px;
     border-radius: 999px;
     background-color: #eff2f5;
+}
+
+.post_create_comment > .MuiAvatar-root {
+    width: 30px;
+    height: 30px;
 }
 
 .post_create_comment > .MuiAvatar-root:hover {

@@ -1,10 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import "./PostCreator.css";
 import Avatar from '@mui/material/Avatar';
-import { useStateValue } from "./StateProvider";
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import db from './firebase';
+import { useStateValue } from "../../../context/StateProvider";
+import { addDoc, collection, onSnapshot, serverTimestamp, doc } from 'firebase/firestore';
+import db from '../../../context/firebase';
 import PhotoCameraRoundedIcon from '@mui/icons-material/PhotoCameraRounded';
+import CreatePostPopUp from "./CreatePostPopUp";
 
 function PostCreator() {
     const[{user}] = useStateValue();
@@ -12,6 +13,19 @@ function PostCreator() {
     const [image, setImage] = useState("");
     const [imageURL,setImageURL] = useState("");
     const filePickerRef = useRef(null);
+    const [ popup, setPopup ] = useState(false);
+
+    
+
+
+
+    const showPopup = ()=>{
+        setPopup(true);
+        console.log(popup)
+    }
+    const closePopup = () => {
+        setPopup(false);
+    }
 
     const addImage = (e)=>{
         const reader = new FileReader();
@@ -41,20 +55,24 @@ function PostCreator() {
 
         await addDoc(collection(db, "posts"),postData);
 
-
         setInput("");
         setImageURL("");
     }
 
   return (
     <div className="postCreator">
+        {(popup==true) ? (<CreatePostPopUp onClose={setPopup()} />) : "" }
+    
         <div className="postCreator_top">
+            
+
             <Avatar src={user.photoURL}/>
             <form>
                 <input
                 value={input}
                 onChange={(e)=>setInput(e.target.value)}
-                className="postCreator_input" 
+                className="postCreator_input"
+                
                 placeholder={"What's on your mind, "+ user.displayName+"?"}/>
                 
                 <input
@@ -73,8 +91,7 @@ function PostCreator() {
             )}
         </div>
         <div className="postCreator_bottom">
-            <div className="inputIcon">
-                
+            <div className="inputIcon">   
             
             </div>
             <div onClick={() => filePickerRef.current.click()} className="inputIcon">
