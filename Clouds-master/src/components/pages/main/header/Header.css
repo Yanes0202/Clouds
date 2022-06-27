@@ -1,6 +1,5 @@
 .header{
     padding: 15px 20px;
-    position: fixed;
     display: flex;
     justify-content: space-between;
     background-color: rgb(117, 192, 215);
@@ -8,7 +7,6 @@
     top: 0;
     align-items: center;
     box-shadow: 0px 5px 8px -9px rgb(0,0,0,0.75);
-    width: 98%;
 }
 
 .header_left{

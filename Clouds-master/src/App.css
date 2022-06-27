@@ -4,18 +4,13 @@
 
 .app_body{
     display: flex;
-    margin-top: 5%;
 }
 
 .app_left{
-    width: 32.5%;
-}
-
-.app_right {
-    width: 32.5%;
+    width: 30%;
 }
 
 .app_center{
-    width: 35%;
+    width: 40%;
     padding-bottom: 20px;
 }
