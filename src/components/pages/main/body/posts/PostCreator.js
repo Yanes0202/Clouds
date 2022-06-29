@@ -15,18 +15,19 @@ function PostCreator() {
     const filePickerRef = useRef(null);
     const [ popup, setPopup ] = useState(false);
 
-    
 
-
-
+    // FEATURE | show popup
     const showPopup = ()=>{
         setPopup(true);
         console.log(popup)
     }
+
+    // FEATURE | close popup
     const closePopup = () => {
         setPopup(false);
     }
 
+    // FEATUER | Add image, show it's small version
     const addImage = (e)=>{
         const reader = new FileReader();
         if(e.target.files[0]){
@@ -38,10 +39,12 @@ function PostCreator() {
         };
     };
 
+    // FEATURE | remove display of attached image
     const removeImage = () => {
         setImage(null);
     };
 
+    //Create post
     const handleSubmit = async (e) => {
         e.preventDefault();
 

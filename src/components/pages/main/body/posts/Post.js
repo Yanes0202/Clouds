@@ -26,9 +26,10 @@ function Post({postId,profilePic, image, userName, timeStamp, message}) {
     +" "+[d.getHours(),
     minutes].join(":");
   
+  const q = query(collection(db,'comments'), orderBy("timeStamp","desc"))
+
   /* Connect to DB to get Comments */
   useEffect(()=>{
-    const q = query(collection(db,'comments'), orderBy("timeStamp","desc"))
     onSnapshot(q,(snapshot) =>(
       setComments(snapshot.docs.map(doc => ({id: doc.id, data: doc.data() })))
     ))

@@ -19,6 +19,7 @@ const dformat = [
   d.getFullYear()].join("/")+" "+[d.getHours(),
     minutes].join(":");
 
+// Create Comment
 const createComment = async (e) => {
     e.preventDefault();
 
@@ -36,14 +37,15 @@ const createComment = async (e) => {
     setNewComment("")
 };
 
-/* Filter Comments to get replied comments */
+// Filter Comments to get replied comments
   function getReplies() {
     return replies.filter((comments) => comments.data.parentId === commentId)
       .sort((a, b) => new Date(a.data.timeStamp).getTime() - new Date(b.data.timeStamp).getTime());
   }
 
+// Toggle Reply Form
 const showReplyForm = () => {
-  let reply = document.querySelector("#"+commentId);
+  let reply = document.getElementById(commentId);
   if(reply.style.display == "flex"){
     reply.style.display = "none";
   }else{
