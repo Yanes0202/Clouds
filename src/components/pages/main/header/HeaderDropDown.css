@@ -1,0 +1,25 @@
+.dropDown {
+    position: absolute;
+    top: 102%;
+    width: 200px;
+    transform: translateX(-45%);
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    right: -81px;
+}
+
+.dropDown_item {
+    background-color: rgb(117, 192, 215);
+    color: #2e81f4;
+    margin: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.dropDown_item:hover {
+    cursor: pointer;
+    background-color: rgb(18, 70, 83);
+}

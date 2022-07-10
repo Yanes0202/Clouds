@@ -3,56 +3,101 @@ import "./Feed.css";
 import PostCreator from "./posts/PostCreator";
 import Post from "./posts/Post";
 import db from "../../../context/firebase";
-import { collection, onSnapshot, orderBy, query, updateDoc, serverTimestamp, doc } from "firebase/firestore";
-
+import { collection, onSnapshot, orderBy, query, doc, getDoc } from "firebase/firestore";
+import { useStateValue } from '../../../context/StateProvider';
+import activity from "../../../context/activity";
 
 
 function Feed() {
-  const [posts, setPosts] = useState([]);
+  const [ posts, setPosts ] = useState([]);
+  const [ loading, setLoading ] = useState(true);
+  const [{user}] = useStateValue();
 
-  
+  const userCollectionName = "users";
 
-  const updateUser = async() => {
-    const userData = {
-      logTimeStamp : serverTimestamp()
-    }
-    await updateDoc(doc(db,"users","IX9t5gpel1Pzm32gnif3"),userData);
+  // Get post user data by post user id
+  const getUserDataByPostId = (posts) => {
+    return Promise.all(
+      posts.map(async (post) => {
+        const postData = post.data();
+        var userData = await getDoc(doc(db,"users",postData.user));
+
+        if(!userData.exists()){
+          console.log("nie ma usera");
+        }else{
+          return {
+            id: post.id,
+            userData: userData.data(),
+            data: postData
+          };
+        }
+      })
+    )
   }
 
   useEffect(()=>{
+    let cancelPreviousPromiseChain = undefined;
     const q = query(collection(db, "posts"), orderBy("timeStamp", "desc"));
 
-    onSnapshot(q, (snapshot) => {
-      setPosts(snapshot.docs.map((doc) => ({ id: doc.id, data: doc.data() })));
+     onSnapshot(q,(snapshot) => {
+      if (cancelPreviousPromiseChain) cancelPreviousPromiseChain();
+
+      let cancelled = false;
+
+      cancelPreviousPromiseChain = () => cancelled = true;
+
+      getUserDataByPostId(snapshot.docs)
+      .then((result) =>{
+        if (cancelled) return;
+        setLoading(false);
+        setPosts(result);
+      })
+      .catch((error) => {
+        if(cancelled) return;
+        setLoading(false);
+        console.log(error);
+      });
     });
-    
-    
   },[]);
+  
+  // Be visible as online
+  const beOnline = () => {
+    activity(user.uid);
+  }
 
+  // Loader
+  if(loading){
+    return (
+      <div className="loader">
+        <div>
 
+        </div>
+      </div>
+    )
+
+  }
+  
   return (
     <div className="feed">
+      <button onClick={beOnline}>CLICK ME!</button>
         <PostCreator/>
         
-        {posts.map(post => (
-      
+        {posts.map((post) => (  
             <Post
               key={post.id}
               postId={post.id}
-              profilePic={post.data.profilePic}
+              profilePic={post.userData.profilePic}
               message={post.data.message}
               timeStamp={post.data.timeStamp}
-              userName={post.data.userName}
+              userName={post.userData.name}
               image={post.data.image}
             />
           
         ))
         }
-
-        
-
     </div>
   )
-}
+  }
+
 
 export default Feed

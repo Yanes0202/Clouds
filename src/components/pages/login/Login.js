@@ -7,6 +7,7 @@ import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { actionTypes } from "../../context/reducer";
 import { useStateValue } from "../../context/StateProvider";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import activity from "../../context/activity";
 
 function Login() {
     const [state, dispatch] = useStateValue();
@@ -31,13 +32,12 @@ function Login() {
             }
             //create user
             setDoc(doc(db, "users",result.user.uid),postData); 
-            
-
-          }else{
-          console.log(snap.data()) ;
+          
           }
         });
         
+        activity(result.user.uid);
+
         dispatch({
           type: actionTypes.SET_USER,
           user: result.user,

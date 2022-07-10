@@ -11,8 +11,10 @@ function App() {
 
   const [{user}] = useStateValue();
 
+  
   return (
     <div className="app">
+      
       {!user ? (
 
         <Login />
@@ -30,8 +32,8 @@ function App() {
             </div>
 
             <div className="app_center">
-
-            <Feed/>
+              
+              <Feed/>
 
             </div>
 

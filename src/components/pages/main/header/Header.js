@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CloudIcon from '@mui/icons-material/Cloud';
 import SearchIcon from '@mui/icons-material/Search';
 import HomeIcon from '@mui/icons-material/Home';
@@ -8,11 +8,14 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import "./Header.css";
 import { useStateValue } from "../../../context/StateProvider";
+import HeaderDropDown from './HeaderDropDown';
 
 function Header() {
     const[{user}] = useStateValue();
+    const [ dropDown, setDropDown ] = useState(false);
 
     const logOut=() => {  }
+
   return (
     <div className="header">
         <div className="header_left">
@@ -42,9 +45,10 @@ function Header() {
             <div className="header_option">
                 <NotificationsActiveIcon fontSize="large"/>
             </div>
-            <div className="header_option" onClick={logOut}>
+            <div className="header_option" onClick={() => { setDropDown(!dropDown)}}>
                 <ExpandMoreIcon fontSize="large"/>
             </div>
+            {dropDown && <HeaderDropDown />}
         </div>
         
     </div>

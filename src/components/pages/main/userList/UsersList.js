@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import "./UsersList.css";
 import User from "./User.js"
 import { useStateValue } from "../../../context/StateProvider";
-import activity from "../../../context/activity";
 
 
 function UsersList() {
@@ -23,7 +22,7 @@ function UsersList() {
     onSnapshot(collection(db,"users"), (snap) =>(
       setUsers(snap.docs.map(doc => ({id: doc.id, data: doc.data()})))
     ))
-    activity(user.uid)
+    
   });
 
   return (

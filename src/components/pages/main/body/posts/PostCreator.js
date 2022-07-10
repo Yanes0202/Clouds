@@ -16,17 +16,6 @@ function PostCreator() {
     const [ popup, setPopup ] = useState(false);
 
 
-    // FEATURE | show popup
-    const showPopup = ()=>{
-        setPopup(true);
-        console.log(popup)
-    }
-
-    // FEATURE | close popup
-    const closePopup = () => {
-        setPopup(false);
-    }
-
     // FEATUER | Add image, show it's small version
     const addImage = (e)=>{
         const reader = new FileReader();
@@ -64,18 +53,17 @@ function PostCreator() {
 
   return (
     <div className="postCreator">
-        {(popup==true) ? (<CreatePostPopUp onClose={setPopup()} />) : "" }
+        {popup && <CreatePostPopUp onClose={setPopup}/>}
     
         <div className="postCreator_top">
             
-
+            
             <Avatar src={user.photoURL}/>
             <form>
                 <input
                 value={input}
                 onChange={(e)=>setInput(e.target.value)}
                 className="postCreator_input"
-                
                 placeholder={"What's on your mind, "+ user.displayName+"?"}/>
                 
                 <input
@@ -108,9 +96,9 @@ function PostCreator() {
                 />
             </div>
             <div className="inputIcon">
-
+            <button onClick={()=>setPopup(true)}>Popup</button>
             </div>
-
+            
         </div>
     </div>
   )

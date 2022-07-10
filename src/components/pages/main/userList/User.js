@@ -24,7 +24,7 @@ function UsersList({ id, name, logTimeStamp, profilePic }) {
    }
   
   useEffect(()=>{
-    activeCheck()
+    activeCheck();
   },[logTimeStamp]);
 
   return (
