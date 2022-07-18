@@ -7,13 +7,12 @@ I. DONE:
 * Komentowanie postów oraz odpowiadanie na komentarze - Po kliknięciu na guzik Comments pojawiają się i chowają komentarze. Odpowiedź na komentarz pojawia się pod komentarzem z wcięciem.
 * Prawy panel z kontaktami oraz ich aktywnością - Przygotowana funkcja wysyłająca do Tablicy Userów request o loginTimeStampie
 * Header Drop Down -  posiada opcję wylogowywania się
-* Post Creation Pop-up - przygotowany jest funkcjonalność pop upa, wystarczy go uzupełnić
+* Post Creation Pop-up - utworzony.
+* Guziki posiadają funkcję wysyłającą requesta o aktywności użytkownika
 
 
 II. TO DO:
 
-* Przypisać funkcję aktywności do guzików
-* Tworzenie postów zrobić w pop upie
 * Likowanie postów i komentarzy
 * Rejestrowanie konta
 * Dodawanie zdjęć do bazy
