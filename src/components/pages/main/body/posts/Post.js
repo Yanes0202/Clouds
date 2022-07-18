@@ -9,6 +9,7 @@ import db from "../../../../context/firebase";
 import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
 import "./Post.css";
+import activity from "../../../../context/activity";
 
 function Post({postId,profilePic, image, userName, timeStamp, message}) {
 
@@ -59,36 +60,39 @@ function Post({postId,profilePic, image, userName, timeStamp, message}) {
     return rootComments.filter((comment) => comment.data.postId == id);
   }
 
-/* Filter Comments to get root Comments */
-const rootComments = comments.filter((comments) => comments.data.parentId === "null");
+  /* Filter Comments to get root Comments */
+  const rootComments = comments.filter((comments) => comments.data.parentId === "null");
 
-/* Filter Comments to get reply Comments */
-const replyComments = comments.filter((comments) => comments.data.parentId !== "null");
+  /* Filter Comments to get reply Comments */
+  const replyComments = comments.filter((comments) => comments.data.parentId !== "null");
 
-/* Togle Comment Div */
-const showComments = ()=>{
-  let commentDiv = document.querySelector("#"+postId+" :nth-child(5)").style.display
-  if(commentDiv=="flex"){
-    document.querySelector("#"+postId+" :nth-child(5)").style.display = "none";
-    document.querySelector("#"+postId+" :nth-child(4)").style.borderBottom = "none";
-    document.querySelector("#"+postId+" :nth-child(4) > #left").classList.add("left");
-    document.querySelector("#"+postId+" :nth-child(4) > #right").classList.add("right");
-  }else{
-    document.querySelector("#"+postId+" :nth-child(5)").style.display = "flex";
-    document.querySelector("#"+postId+" :nth-child(4)").style.borderBottom = "1px solid lightgray";
-    document.querySelector("#"+postId+" :nth-child(4) > #left").classList.remove("left");
-    document.querySelector("#"+postId+" :nth-child(4) > #right").classList.remove("right");
+  /* Togle Comment Div */
+  const showComments = ()=>{
+    let commentDiv = document.querySelector("div[id='"+postId+"'] :nth-child(5)").style.display
+    if(commentDiv=="flex"){
+      document.querySelector("div[id='"+postId+"'] :nth-child(5)").style.display = "none";
+      document.querySelector("div[id='"+postId+"'] :nth-child(4)").style.borderBottom = "none";
+      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #left").classList.add("left");
+      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #right").classList.add("right");
+    }else{
+      document.querySelector("div[id='"+postId+"'] :nth-child(5)").style.display = "flex";
+      document.querySelector("div[id='"+postId+"'] :nth-child(4)").style.borderBottom = "1px solid lightgray";
+      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #left").classList.remove("left");
+      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #right").classList.remove("right");
+    }
   }
 
-}
-
-
+  // Be visible as online
+  const beOnline = () => {
+    activity(user.uid);
+  }
 
   return (
     <div id={postId} className="post">
       <div className="post_top">
         <Avatar src={profilePic}
-        className="post_avatar"/>
+        className="post_avatar"
+        onClick={beOnline} />
         <div className="post_top_info">
           <h3>{userName}</h3>
           <p>{dformat}</p>
@@ -101,15 +105,18 @@ const showComments = ()=>{
         <img src={image} alt="" />
       </div>
       <div className="post_options">
-        <div id="left" className="post_option" >
+        <div id="left" className="post_option left" onClick={beOnline}>
           <ThumbUpOutlinedIcon />
           <p>Like</p>
         </div>
-        <div className="post_option" onClick={showComments}>
+        <div className="post_option" onClick={()=>{
+        showComments();
+        beOnline();
+        }}>
           <CommentOutlinedIcon />
           <p>Comment</p>
         </div>
-        <div id="right" className="post_option" >
+        <div id="right" className="post_option right" onClick={beOnline}>
           <ShareOutlinedIcon />
           <p>Share</p>
         </div>
@@ -132,12 +139,13 @@ const showComments = ()=>{
         ))}
 
         <div className="post_create_comment">
-          <Avatar src={user.photoURL}/>
+          <Avatar src={user.photoURL} onClick={beOnline}/>
           <form onSubmit={createComment}>
             <input 
             value = {newComment}
             onChange = {(e)=>setNewComment(e.target.value)}
-            placeholder="Write Comment"/>
+            placeholder="Write Comment"
+            onClick={beOnline}/>
             <button type="submit" hidden/>
           </form>
           

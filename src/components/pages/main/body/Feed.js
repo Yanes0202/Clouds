@@ -14,13 +14,14 @@ function Feed() {
   const [{user}] = useStateValue();
 
   const userCollectionName = "users";
+  const postsCollectionName = "posts";
 
   // Get post user data by post user id
   const getUserDataByPostId = (posts) => {
     return Promise.all(
       posts.map(async (post) => {
         const postData = post.data();
-        var userData = await getDoc(doc(db,"users",postData.user));
+        var userData = await getDoc(doc(db,userCollectionName,postData.user));
 
         if(!userData.exists()){
           console.log("nie ma usera");
@@ -37,7 +38,7 @@ function Feed() {
 
   useEffect(()=>{
     let cancelPreviousPromiseChain = undefined;
-    const q = query(collection(db, "posts"), orderBy("timeStamp", "desc"));
+    const q = query(collection(db, postsCollectionName), orderBy("timeStamp", "desc"));
 
      onSnapshot(q,(snapshot) => {
       if (cancelPreviousPromiseChain) cancelPreviousPromiseChain();
@@ -69,17 +70,13 @@ function Feed() {
   if(loading){
     return (
       <div className="loader">
-        <div>
-
-        </div>
+        <div/>
       </div>
     )
-
   }
   
   return (
     <div className="feed">
-      <button onClick={beOnline}>CLICK ME!</button>
         <PostCreator/>
         
         {posts.map((post) => (  
@@ -92,7 +89,6 @@ function Feed() {
               userName={post.userData.name}
               image={post.data.image}
             />
-          
         ))
         }
     </div>

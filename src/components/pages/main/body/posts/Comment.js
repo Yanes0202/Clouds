@@ -1,26 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Avatar from '@mui/material/Avatar';
 import "./Comment.css";
 import db from "../../../../context/firebase";
-import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc } from "firebase/firestore";
+import { collection, serverTimestamp, addDoc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
+import activity from "../../../../context/activity";
 
 function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) {
-const d = new Date(timeStamp?.toDate());
-const minutes= String(d.getMinutes()).padStart(2, '0');
-const[{user}] = useStateValue();
-const [newComment,setNewComment] = useState("");
-const [comments,setComments] = useState([]);
+  const d = new Date(timeStamp?.toDate());
+  const minutes= String(d.getMinutes()).padStart(2, '0');
+  const[{user}] = useStateValue();
+  const [newComment,setNewComment] = useState("");
 
-
-const dformat = [
-  d.getDate(),
-  d.getMonth()+1,
-  d.getFullYear()].join("/")+" "+[d.getHours(),
+  // Format data
+  const dformat = [
+    d.getDate(),
+    d.getMonth()+1,
+    d.getFullYear()].join("/")+" "+[d.getHours(),
     minutes].join(":");
 
-// Create Comment
-const createComment = async (e) => {
+  // Create Comment
+  const createComment = async (e) => {
     e.preventDefault();
 
     const createCommentData = {
@@ -35,28 +35,33 @@ const createComment = async (e) => {
     await addDoc(collection(db, "comments"),createCommentData);
     showReplyForm();
     setNewComment("")
-};
+  };
 
-// Filter Comments to get replied comments
+  // Filter Comments to get replied comments
   function getReplies() {
     return replies.filter((comments) => comments.data.parentId === commentId)
       .sort((a, b) => new Date(a.data.timeStamp).getTime() - new Date(b.data.timeStamp).getTime());
   }
 
-// Toggle Reply Form
-const showReplyForm = () => {
-  let reply = document.getElementById(commentId);
-  if(reply.style.display == "flex"){
-    reply.style.display = "none";
-  }else{
-    reply.style.display = "flex";
+  // Toggle Reply Form
+  const showReplyForm = () => {
+    let reply = document.getElementById(commentId);
+    if(reply.style.display == "flex"){
+      reply.style.display = "none";
+    }else{
+      reply.style.display = "flex";
+    }
   }
-}
+
+  // Be visible as online
+  const beOnline = () => {
+    activity(user.uid);
+  }
 
   return (
     <div className="comment">
       <div className="comment_top">
-        <Avatar src={profilePic}/>
+        <Avatar src={profilePic} onClick={beOnline}/>
         
         <div className="comment_base">
           <div className="comment_body">
@@ -65,7 +70,9 @@ const showReplyForm = () => {
           </div>
 
           <div className="comment_option">
-            <p className="option_buttons">Like</p>
+            <p className="option_buttons" onClick={()=>{
+              beOnline();
+            }}>Like</p>
             <p className="option_buttons" onClick={showReplyForm}>Reply</p>
             {dformat}
           </div>

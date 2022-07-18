@@ -1,11 +1,12 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import "./PostCreator.css";
 import Avatar from '@mui/material/Avatar';
 import { useStateValue } from "../../../../context/StateProvider";
-import { addDoc, collection, onSnapshot, serverTimestamp, doc } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import db from '../../../../context/firebase';
 import PhotoCameraRoundedIcon from '@mui/icons-material/PhotoCameraRounded';
 import CreatePostPopUp from "./CreatePostPopUp";
+import activity from '../../../../context/activity';
 
 function PostCreator() {
     const[{user}] = useStateValue();
@@ -16,7 +17,7 @@ function PostCreator() {
     const [ popup, setPopup ] = useState(false);
 
 
-    // FEATUER | Add image, show it's small version
+    // FEATURE | Add image, show it's small version
     const addImage = (e)=>{
         const reader = new FileReader();
         if(e.target.files[0]){
@@ -33,8 +34,13 @@ function PostCreator() {
         setImage(null);
     };
 
+    // Be visible as online
+    const beOnline = () => {
+        activity(user.uid);
+    }
+
     //Create post
-    const handleSubmit = async (e) => {
+    const createPost = async (e) => {
         e.preventDefault();
 
         const postData = {
@@ -58,28 +64,22 @@ function PostCreator() {
         <div className="postCreator_top">
             
             
-            <Avatar src={user.photoURL}/>
-            <form>
-                <input
-                value={input}
-                onChange={(e)=>setInput(e.target.value)}
-                className="postCreator_input"
-                placeholder={"What's on your mind, "+ user.displayName+"?"}/>
-                
-                <input
-                value={imageURL}
-                onChange={(e)=>setImageURL(e.target.value)}
-                placeholder="Image URL"/>
+            <Avatar src={user.photoURL} onClick={beOnline} />
+            <button className="popup_button"
+            onClick={()=>{
+                beOnline();
+                setPopup(true);
+            }}>
+                {"What's on your mind, "+ user.displayName+"?"}
+            </button>
+            
 
-                <button onClick={handleSubmit} type="submit"></button>
-            </form>
-
-            {image &&(
+            {/*image &&(
                 <div onClick={removeImage} className="smallImage">
                     <img src={image} alt=""/>
                     <p>Remove</p>
                 </div>
-            )}
+            )*/}
         </div>
         <div className="postCreator_bottom">
             <div className="inputIcon">   
@@ -96,7 +96,6 @@ function PostCreator() {
                 />
             </div>
             <div className="inputIcon">
-            <button onClick={()=>setPopup(true)}>Popup</button>
             </div>
             
         </div>

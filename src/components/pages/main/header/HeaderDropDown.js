@@ -4,9 +4,11 @@ import { useStateValue } from "../../../context/StateProvider";
 
 
 
-function HeaderDropDown({}){
+function HeaderDropDown({ onClose }){
 
     const [state, dispatch] = useStateValue();
+
+    // LOGOUT USER
     const logOut= ()=> {
         dispatch({
             type: actionTypes.SET_USER,
@@ -16,10 +18,13 @@ function HeaderDropDown({}){
 
 
     return (
-    <div className="dropDown">
-        <div className="dropDown_item">Settings</div>
-        <div className="dropDown_item" onClick={logOut}>Log Out</div>
-    </div>);
+    <>
+        <div className="dropDown_overlay" onClick={()=>onClose(false)}/>
+        <div className="dropDown_content">
+            <div className="dropDown_item">Settings</div>
+            <div className="dropDown_item" onClick={logOut}>Log Out</div>
+        </div>
+    </>);
 }
 
 export default HeaderDropDown

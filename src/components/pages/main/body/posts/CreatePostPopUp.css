@@ -21,22 +21,21 @@ body.active-modal {
     left: 0;
     right: 0;
     bottom: 0;
-    
     position: fixed;
     background-color: rgba(0, 0, 0, 0.25);
 }
 
 .popup_content {
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     line-height: 1.4;
     background: white;
-    padding: 14px 28px;
-    border-radius: 3px;
+    padding: 20px;
+    border-radius: 15px;
     max-width: 600px;
-    min-width: 300px;
+    min-width: 350px;
 }
 
 .popup_content .close_btn {
@@ -44,3 +43,76 @@ body.active-modal {
     top: 16px;
     right: 16px;
 }
+
+.close_btn {
+    border-radius: 50%;
+    border: none;
+    color: white;
+    background-color: lightgray;
+}
+
+.popup_header {
+    border-bottom: 1px solid lightgray;
+}
+
+.close_btn:hover {
+    background-color: gray;
+    cursor: pointer;
+}
+
+.popup_user_info {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.popup_user_info > h5 {
+    margin-left: 10px;
+}
+
+.popup_post_create {
+    display: flex;
+    padding-top: 8px;
+    padding-left: 8px;
+    padding-bottom: 8px;
+    flex-direction: column;
+}
+
+.popup_post_create > form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.popup_post_create > form > input {
+    outline-width: 0;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 999px;
+    background-color: #eff2f5;
+}
+
+
+
+.submit {
+    height: 30px;
+    margin-top: 10px;
+    background-color: rgb(117, 192, 215);
+    border: none;
+    border-radius: 15px;
+    color: white;
+}
+
+.submit:hover {
+    cursor: pointer;
+    background-color: rgb(18, 70, 83);
+}
+
+.popup_post_create > .MuiAvatar-root:hover {
+    filter: brightness(1.1);
+    cursor: pointer;
+}
+
+

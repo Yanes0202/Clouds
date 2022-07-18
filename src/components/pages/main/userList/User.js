@@ -5,7 +5,7 @@ import "./User.css";
 
 function UsersList({ id, name, logTimeStamp, profilePic }) {
 
-  // CHECK IF USER IS ACTIVE
+  // Check if user is active
   const activeCheck = () => {
     
     if (logTimeStamp ) {
@@ -20,7 +20,6 @@ function UsersList({ id, name, logTimeStamp, profilePic }) {
         document.getElementById(id).style.backgroundColor="green";
       }
     }
-    
    }
   
   useEffect(()=>{

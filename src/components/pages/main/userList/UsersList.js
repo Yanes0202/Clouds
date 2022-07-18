@@ -13,7 +13,7 @@ function UsersList() {
   const [users, setUsers] = useState([]);
   const[{user}] = useStateValue();
 
-  // FILTER TO SHOW USERS WITHOUT CURRENT USER
+  // Filter to show users without current user
   const usersFilter = users.filter((u)=> {
       return u.id!==user.uid;
   }) 
@@ -27,7 +27,7 @@ function UsersList() {
 
   return (
     <div className="users">
-      <h3>Kontakty</h3>
+      <h3>Contacts</h3>
       {usersFilter.map((u) => (
         <User 
         key={u.id} 

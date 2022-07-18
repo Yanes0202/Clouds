@@ -20,6 +20,20 @@
     border-bottom: 1px solid lightgray;
 }
 
+.popup_button {
+    outline-width: 0;
+    border: none;
+    padding: 5px 90px;
+    margin: 0 10px;
+    background-color: #eff2f5;
+    border-radius: 999px;
+}
+
+.popup_button:hover {
+    cursor: pointer;
+    filter: brightness(0.9);
+}
+
 .postCreator_top > form {
     flex: 1;
     display: flex;
@@ -40,6 +54,7 @@
 
 .postCreator_top > .MuiAvatar-root:hover {
     filter: brightness(1.1);
+    cursor: pointer;
 }
 
 .inputIcon {
