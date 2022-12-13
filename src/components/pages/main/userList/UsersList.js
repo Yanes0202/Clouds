@@ -36,7 +36,7 @@ function UsersList() {
         profilePic={u.data.profilePic}
         logTimeStamp={u.data.logTimeStamp}
         />
-  ))}
+      ))}
     </div>
   );
 }

@@ -81,7 +81,7 @@ function PostCreator() {
                 </div>
             )*/}
         </div>
-        <div className="postCreator_bottom">
+        {/*<div className="postCreator_bottom">
             <div className="inputIcon">   
             
             </div>
@@ -98,8 +98,9 @@ function PostCreator() {
             <div className="inputIcon">
             </div>
             
+        </div>*/}
+        
         </div>
-    </div>
   )
 }
 
