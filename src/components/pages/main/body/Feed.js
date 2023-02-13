@@ -28,6 +28,7 @@ function Feed() {
         }else{
           return {
             id: post.id,
+            userId: userData.id,
             userData: userData.data(),
             data: postData
           };
@@ -86,6 +87,7 @@ function Feed() {
               profilePic={post.userData.profilePic}
               message={post.data.message}
               timeStamp={post.data.timeStamp}
+              userId = {post.userId}
               userName={post.userData.name}
               image={post.data.image}
             />

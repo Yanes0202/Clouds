@@ -1,3 +1,20 @@
+:root {
+    font-size: medium;
+    --bg-primary: rgb(117, 192, 215);
+    --bg-secondary: #2e81f4;
+    --btn-hover: rgb(18, 70, 83);
+    --ol-shadow: rgba(0, 0, 0, 0.2);
+    --ip-bg: #eff2f5;
+}
+
+body::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #dfe1e3;
+}
+
 .app{
     height: 100xh;
 }

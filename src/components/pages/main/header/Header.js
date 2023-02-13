@@ -50,7 +50,7 @@ function Header() {
                 <NotificationsActiveIcon fontSize="large"/>
             </div>
             <div className="header_option" onClick={() => { setDropDown(!dropDown)}}>
-                <ExpandMoreIcon fontSize="large" onClick={beOnline} />
+                <ExpandMoreIcon fontSize="large" />
             </div>
             {dropDown && <HeaderDropDown onClose={setDropDown}/>}
         </div>

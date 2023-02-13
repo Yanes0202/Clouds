@@ -1,0 +1,12 @@
+.teams{
+    margin-top: -1rem;
+    padding-bottom: 5rem;
+    padding-left: 20px;
+    position: fixed;
+    padding-top: 2%;
+    width: 26%;
+    height: 85%;
+    text-align:justify;
+    border-right: 1px solid lightgray;
+    overflow-y: auto;
+}

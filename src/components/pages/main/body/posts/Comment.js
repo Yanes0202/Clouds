@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Avatar from '@mui/material/Avatar';
 import "./Comment.css";
 import db from "../../../../context/firebase";
-import { collection, serverTimestamp, addDoc } from "firebase/firestore";
+import { collection, serverTimestamp, addDoc, getDoc, doc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
 import activity from "../../../../context/activity";
 
-function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) {
+function Comment({replies,commentId,postId,body,timeStamp,userId}) {
   const d = new Date(timeStamp?.toDate());
   const minutes= String(d.getMinutes()).padStart(2, '0');
-  const[{user}] = useStateValue();
-  const [newComment,setNewComment] = useState("");
+  const [{user}] = useStateValue();
+  const [newComment, setNewComment] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [replyForm, setReplyForm] = useState(false);
 
   // Format data
   const dformat = [
@@ -19,38 +21,49 @@ function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) 
     d.getFullYear()].join("/")+" "+[d.getHours(),
     minutes].join(":");
 
+    const getUserData = async () => {
+      const docSnap = await getDoc(doc(db, "users", userId));
+      if(docSnap.exists()){
+        setUserData(docSnap.data())
+      }
+    }
+
+  useEffect(() => {
+    getUserData()
+    
+  },[])
+
+
   // Create Comment
   const createComment = async (e) => {
     e.preventDefault();
 
     const createCommentData = {
       "userName": user.displayName,
-      "body": "@"+userName+" "+newComment,
+      "body": "@" + userData.name + " " + newComment,
       "timeStamp": serverTimestamp(),
       "parentId": commentId,
       "profilePic": user.photoURL,
-      "postId" : postId
+      "postId" : postId,
+      "userId" : user.uid
     }
-
-    await addDoc(collection(db, "comments"),createCommentData);
-    showReplyForm();
-    setNewComment("")
+    
+    if(newComment) {
+      await addDoc(collection(db, "comments"),createCommentData);
+      toggleReplyForm();
+      setNewComment("")
+    }
+    
   };
 
   // Filter Comments to get replied comments
   function getReplies() {
-    return replies.filter((comments) => comments.data.parentId === commentId)
-      .sort((a, b) => new Date(a.data.timeStamp).getTime() - new Date(b.data.timeStamp).getTime());
+    return replies.filter((comments) => comments.data.parentId === commentId);
   }
 
   // Toggle Reply Form
-  const showReplyForm = () => {
-    let reply = document.getElementById(commentId);
-    if(reply.style.display == "flex"){
-      reply.style.display = "none";
-    }else{
-      reply.style.display = "flex";
-    }
+  const toggleReplyForm = () => {
+    setReplyForm(!replyForm);
   }
 
   // Be visible as online
@@ -59,13 +72,14 @@ function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) 
   }
 
   return (
+    
     <div className="comment">
       <div className="comment_top">
-        <Avatar src={profilePic} onClick={beOnline}/>
+        <Avatar src={userData.profilePic} onClick={beOnline}/>
         
         <div className="comment_base">
           <div className="comment_body">
-            <h4>{userName}</h4>
+            <h4>{userData.name}</h4>
             <p>{body}</p>
           </div>
 
@@ -73,7 +87,7 @@ function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) 
             <p className="option_buttons" onClick={()=>{
               beOnline();
             }}>Like</p>
-            <p className="option_buttons" onClick={showReplyForm}>Reply</p>
+            <p className="option_buttons" onClick={toggleReplyForm}>Reply</p>
             {dformat}
           </div>
                 
@@ -99,7 +113,8 @@ function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) 
         ))}
         </div>)}
 
-      <div id={commentId} className="comment_create_reply">
+      {replyForm ? (
+        <div id={commentId} className="comment_create_reply">
           <Avatar src={user.photoURL}/>
           <form onSubmit={createComment}>
             <input 
@@ -109,7 +124,9 @@ function Comment({replies,commentId,postId,profilePic,userName,body,timeStamp}) 
             <button type="submit" hidden/>
           </form>
           
-        </div>
+        </div>) : null
+        }
+      
         
     </div>
   )

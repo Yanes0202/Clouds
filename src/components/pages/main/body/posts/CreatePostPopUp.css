@@ -64,6 +64,7 @@ body.active-modal {
     display: flex;
     align-items: center;
     justify-content: left;
+    margin-bottom: 10px;
 }
 
 .popup_user_info > h5 {
@@ -76,6 +77,21 @@ body.active-modal {
     padding-left: 8px;
     padding-bottom: 8px;
     flex-direction: column;
+}
+
+.ck-content {
+    height: 150px;
+    overflow: auto;
+}
+
+.ck-color-table {
+    height: 200px;
+    overflow: auto;
+}
+
+.ck-color-ui-dropdown > div {
+    height: 200px;
+    overflow: auto;
 }
 
 .popup_post_create > form {
@@ -115,4 +131,8 @@ body.active-modal {
     cursor: pointer;
 }
 
-
+#errorMessage {
+    margin-left: 10px;
+    display: none;
+    color: red;
+}

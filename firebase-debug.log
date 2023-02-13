@@ -1,0 +1,86 @@
+[debug] [2023-02-13T19:10:45.599Z] ----------------------------------------------------------------------
+[debug] [2023-02-13T19:10:45.601Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\adrian.dabrowski\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2023-02-13T19:10:45.601Z] CLI Version:   11.22.0
+[debug] [2023-02-13T19:10:45.601Z] Platform:      win32
+[debug] [2023-02-13T19:10:45.602Z] Node Version:  v16.14.2
+[debug] [2023-02-13T19:10:45.602Z] Time:          Mon Feb 13 2023 20:10:45 GMT+0100 (czas środkowoeuropejski standardowy)
+[debug] [2023-02-13T19:10:45.602Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-02-13T19:10:45.664Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-02-13T19:10:45.664Z] > authorizing via signed-in user (adriand0202@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\adrian.dabrowski\Documents\GitHub\Clouds
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2023-02-13T19:11:12.991Z] Using project from CLI flag: react-clouds
+[debug] [2023-02-13T19:11:12.994Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/react-clouds [none]
+[debug] [2023-02-13T19:11:13.623Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/react-clouds 403
+[debug] [2023-02-13T19:11:13.623Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/react-clouds {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2023-02-13T19:11:13.623Z] HTTP Error: 403, The caller does not have permission
+[debug] [2023-02-13T19:11:13.743Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\adrian.dabrowski\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:49:12)
+    at RetryOperation._fn (C:\Users\adrian.dabrowski\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:288:77)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[error] 
+[error] Error: Failed to get Firebase project react-clouds. Please make sure the project exists and your account has permission to access it.
+[debug] [2023-02-13T19:12:54.131Z] ----------------------------------------------------------------------
+[debug] [2023-02-13T19:12:54.132Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\adrian.dabrowski\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2023-02-13T19:12:54.133Z] CLI Version:   11.22.0
+[debug] [2023-02-13T19:12:54.133Z] Platform:      win32
+[debug] [2023-02-13T19:12:54.133Z] Node Version:  v16.14.2
+[debug] [2023-02-13T19:12:54.134Z] Time:          Mon Feb 13 2023 20:12:54 GMT+0100 (czas środkowoeuropejski standardowy)
+[debug] [2023-02-13T19:12:54.134Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-02-13T19:12:54.190Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-02-13T19:12:54.190Z] > authorizing via signed-in user (adriand0202@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\adrian.dabrowski\Documents\GitHub\Clouds
+
+Before we get started, keep in mind:
+
+  * You are initializing within an existing Firebase project directory
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2023-02-13T19:13:32.094Z] Using project from CLI flag: react-clouds
+[debug] [2023-02-13T19:13:32.097Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/react-clouds [none]
+[debug] [2023-02-13T19:13:32.635Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/react-clouds 403
+[debug] [2023-02-13T19:13:32.635Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/react-clouds {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2023-02-13T19:13:32.636Z] HTTP Error: 403, The caller does not have permission
+[debug] [2023-02-13T19:13:32.756Z] FirebaseError: HTTP Error: 403, The caller does not have permission
+    at responseToError (C:\Users\adrian.dabrowski\AppData\Roaming\npm\node_modules\firebase-tools\lib\responseToError.js:49:12)
+    at RetryOperation._fn (C:\Users\adrian.dabrowski\AppData\Roaming\npm\node_modules\firebase-tools\lib\apiv2.js:288:77)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+[error] 
+[error] Error: Failed to get Firebase project react-clouds. Please make sure the project exists and your account has permission to access it.

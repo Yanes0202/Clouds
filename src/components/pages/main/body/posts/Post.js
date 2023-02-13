@@ -4,18 +4,25 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Comment from './Comment';
 import db from "../../../../context/firebase";
 import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
 import "./Post.css";
 import activity from "../../../../context/activity";
+import parse from "html-react-parser";
+import PostDropDown from "./PostDropDown.js";
 
-function Post({postId,profilePic, image, userName, timeStamp, message}) {
+function Post({postId, profilePic, image, userName, timeStamp, userId, message}) {
 
-  const [comments,setComments] = useState([]);
-  const[{user}] = useStateValue();
-  const [newComment,setNewComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const [{user}] = useStateValue();
+  const [newComment, setNewComment] = useState("");
+  const [showComments, setShowComments] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [configDropDown, setConfigDropDown] = useState(false);
+  const [dropDownAvailable, setDropDownAvailable] = useState(false);
 
   const d = new Date(timeStamp?.toDate());
   const minutes= String(d.getMinutes()).padStart(2, '0');
@@ -26,15 +33,16 @@ function Post({postId,profilePic, image, userName, timeStamp, message}) {
     d.getFullYear()].join("/")
     +" "+[d.getHours(),
     minutes].join(":");
-  
-  const q = query(collection(db,'comments'), orderBy("timeStamp","desc"))
 
-  /* Connect to DB to get Comments */
-  useEffect(()=>{
+  
+  useEffect(() => {
+    /* Check if post is created by you */
+    if(userId === user.uid) { setDropDownAvailable(true) }
+    /* Connect to DB to get Comments */
+    const q = query(collection(db,'comments'), orderBy("timeStamp","asc"));
     onSnapshot(q,(snapshot) =>(
-      setComments(snapshot.docs.map(doc => ({id: doc.id, data: doc.data() })))
+      setComments(snapshot.docs.map(doc => ({id: doc.id, data: doc.data()})))
     ))
-    
   },[]);
 
   /* Create Comment method */
@@ -47,17 +55,20 @@ function Post({postId,profilePic, image, userName, timeStamp, message}) {
       "timeStamp": serverTimestamp(),
       "parentId": "null",
       "profilePic": user.photoURL,
-      "postId" : postId
+      "postId" : postId,
+      "userId" : user.uid
     }
 
-    await addDoc(collection(db, "comments"),createCommentData);
+    if(newComment){
+      await addDoc(collection(db, "comments"),createCommentData);
 
-    setNewComment("")
+      setNewComment("")
+    }
   };
   
   /* Filter Comments to get post Comments */
   const postComments= (id)=>{
-    return rootComments.filter((comment) => comment.data.postId == id);
+    return rootComments.filter((comment) => comment.data.postId === id);
   }
 
   /* Filter Comments to get root Comments */
@@ -67,91 +78,133 @@ function Post({postId,profilePic, image, userName, timeStamp, message}) {
   const replyComments = comments.filter((comments) => comments.data.parentId !== "null");
 
   /* Togle Comment Div */
-  const showComments = ()=>{
-    let commentDiv = document.querySelector("div[id='"+postId+"'] :nth-child(5)").style.display
-    if(commentDiv=="flex"){
-      document.querySelector("div[id='"+postId+"'] :nth-child(5)").style.display = "none";
-      document.querySelector("div[id='"+postId+"'] :nth-child(4)").style.borderBottom = "none";
-      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #left").classList.add("left");
-      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #right").classList.add("right");
-    }else{
-      document.querySelector("div[id='"+postId+"'] :nth-child(5)").style.display = "flex";
-      document.querySelector("div[id='"+postId+"'] :nth-child(4)").style.borderBottom = "1px solid lightgray";
-      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #left").classList.remove("left");
-      document.querySelector("div[id='"+postId+"'] :nth-child(4) > #right").classList.remove("right");
+  const toggleComments = ()=>{
+    setShowComments(!showComments);
+  }
+
+  /* Function required for post like hover  */
+  const likeHover = (event) => {
+    if(showComments){
+      event.currentTarget.classList.remove("left")
+    } else {
+      event.currentTarget.classList.add("left")
     }
   }
 
-  // Be visible as online
+  /* Function required for post share hover */
+  const shareHover = event => {
+    if(showComments){
+      event.currentTarget.classList.remove("right")
+    } else {
+      event.currentTarget.classList.add("right")
+    }
+  }
+
+  /* Toggling like */
+  const toggleLike = () => { setLiked(!liked);}
+
+  /* Be visible as online */
   const beOnline = () => {
     activity(user.uid);
   }
 
+  /* Show dropDown */
+  const dropDown = () => {
+    if(dropDownAvailable){
+      setConfigDropDown(true)
+    }
+  }
+
   return (
-    <div id={postId} className="post">
+    <div className="post">
+      
       <div className="post_top">
         <Avatar src={profilePic}
         className="post_avatar"
-        onClick={beOnline} />
+        onClick={beOnline}
+        />
+
         <div className="post_top_info">
           <h3>{userName}</h3>
           <p>{dformat}</p>
         </div>
+
+
+        <div className={dropDownAvailable ? "post_top_more enabled" : "post_top_more disabled" } onClick = {dropDown}>
+          <MoreVertIcon/>
+        </div>
+        {configDropDown && <PostDropDown onClose={setConfigDropDown} postId={postId} image={image} message={message}/>}
+
       </div>
+
       <div className="post_bottom">
-        <p>{message}</p>
+        <p>{parse(message)}</p>
       </div>
-      <div className="post_image">
-        <img src={image} alt="" />
-      </div>
-      <div className="post_options">
-        <div id="left" className="post_option left" onClick={beOnline}>
-          <ThumbUpOutlinedIcon />
+      
+      {image ? 
+        (
+        <div className="post_image">
+          <img src={image} alt="" />
+        </div>
+        )
+        : null
+      }
+      
+      <div className="post_actions" style={{borderBottom: showComments ? "1px solid lightgray" : "none"}} >
+
+        <div className="post_action left" onClick={toggleLike} onMouseEnter={likeHover} >
+          {liked ? <ThumbUpRoundedIcon/> : <ThumbUpOutlinedIcon/> }
           <p>Like</p>
         </div>
-        <div className="post_option" onClick={()=>{
-        showComments();
-        beOnline();
-        }}>
+
+        <div className="post_action" onClick={()=>{toggleComments();}}>
           <CommentOutlinedIcon />
           <p>Comment</p>
         </div>
-        <div id="right" className="post_option right" onClick={beOnline}>
+
+        <div className="post_action right" onClick={beOnline} onMouseEnter={shareHover}>
           <ShareOutlinedIcon />
           <p>Share</p>
         </div>
-      </div>
-      <div  className="post_comments">
-        {postComments(postId).map(comment => (
-          
-          <Comment
-            key={comment.id}
-            commentId={comment.id}
-            postId={postId}
-            timeStamp={comment.data.timeStamp}
-            userName={comment.data.userName}
-            body={comment.data.body}
-            userId={comment.data.userId}
-            parentId={comment.data.parentId}
-            profilePic={comment.data.profilePic}
-            replies={replyComments}
-          />
-        ))}
 
-        <div className="post_create_comment">
-          <Avatar src={user.photoURL} onClick={beOnline}/>
-          <form onSubmit={createComment}>
-            <input 
-            value = {newComment}
-            onChange = {(e)=>setNewComment(e.target.value)}
-            placeholder="Write Comment"
-            onClick={beOnline}/>
-            <button type="submit" hidden/>
-          </form>
-          
+      </div>
+
+      {showComments ?
+        <div className="post_comments">
+          {postComments(postId).map(comment => (
+            <Comment
+              key={comment.id}
+              commentId={comment.id}
+              postId={postId}
+              timeStamp={comment.data.timeStamp}
+              body={comment.data.body}
+              userId={comment.data.userId}
+              parentId={comment.data.parentId}
+              replies={replyComments}
+            />
+          ))}
+
+          <div className="post_create_comment">
+
+            <Avatar src={user.photoURL}/>
+
+            <form onSubmit={createComment}>
+
+              <input 
+                value = {newComment}
+                onChange = {(e)=>setNewComment(e.target.value)}
+                placeholder = "Write Comment"
+              />
+
+              <button type = "submit" hidden/>
+
+            </form>
+
+          </div>
         </div>
-
-      </div>
+        :
+        null
+      }
 
     </div>
   )

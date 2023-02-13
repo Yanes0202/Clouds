@@ -1,5 +1,3 @@
-
-
 .loader {
     height: 100% ;
     width: 100%;
@@ -12,8 +10,8 @@
 .loader>div {
     height: 100px;
     width: 100px;
-    border: 15px solid rgb(117, 192, 215);
-    border-top-color: rgb(18, 70, 83);
+    border: 15px solid var(--bg-primary);
+    border-top-color: var(--btn-hover);
     position: absolute;
     margin: auto;
     top: 0;

@@ -67,7 +67,6 @@ function PostCreator() {
             <Avatar src={user.photoURL} onClick={beOnline} />
             <button className="popup_button"
             onClick={()=>{
-                beOnline();
                 setPopup(true);
             }}>
                 {"What's on your mind, "+ user.displayName+"?"}
@@ -81,7 +80,7 @@ function PostCreator() {
                 </div>
             )*/}
         </div>
-        <div className="postCreator_bottom">
+        {/*<div className="postCreator_bottom">
             <div className="inputIcon">   
             
             </div>
@@ -98,8 +97,9 @@ function PostCreator() {
             <div className="inputIcon">
             </div>
             
+        </div>*/}
+        
         </div>
-    </div>
   )
 }
 

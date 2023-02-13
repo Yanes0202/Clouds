@@ -5,6 +5,7 @@ import Login from './components/pages/login/Login';
 import { useStateValue } from './components/context/StateProvider';
 
 import UsersList from './components/pages/main/userList/UsersList';
+import Teams from './components/pages/main/teams/Teams';
 
 
 function App() {
@@ -28,7 +29,9 @@ function App() {
           <div className="app_body">
 
             <div className="app_left">
-
+            {/*
+              <Teams/>
+            */}
             </div>
 
             <div className="app_center">
@@ -38,7 +41,7 @@ function App() {
             </div>
 
             <div className="app_right">
-
+            
               <UsersList/>
 
             </div>

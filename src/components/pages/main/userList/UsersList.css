@@ -1,11 +1,13 @@
 .users{
-    margin-top: -16px;
+    margin-top: -1rem;
+    padding-bottom: 5rem;
     padding-left: 20px;
     position: fixed;
     margin-left: 6%;
     padding-top: 2%;
-    width: 32.5%;
-    height: 89%;
+    width: 25%;
+    height: 85%;
     text-align:justify;
     border-left: 1px solid lightgray;
+    overflow-y: auto;
 }

@@ -3,13 +3,13 @@
     position: fixed;
     display: flex;
     justify-content: space-between;
-    background-color: rgb(117, 192, 215);
-    z-index: 100;
+    background-color: var(--bg-primary);
+    z-index: 1;
     top: 0;
     align-items: center;
-    box-shadow: 0px 5px 8px -9px rgb(0,0,0,0.75);
+    box-shadow: 0px 5px 8px -9px var(--ol-shadow);
     width: 98%;
-    height: 6%;
+    height: 40px;
 }
 
 .header_left{
@@ -22,20 +22,20 @@
 .header_input{
     display: flex;
     align-items: center;
-    background-color: #eff2f5;
+    background-color: var(--ip-bg);
     padding: 10px;
     margin-left: 10px;
     border-radius: 999px;
     height: 20px;
 }
 
-.header_input > input{
+.header_input > input {
     border: none;
     background-color: transparent;
     outline-width: 0;
 }
 
-.header_center{
+.header_center {
     display: flex;
     flex: 1;
     justify-content: center;
@@ -46,10 +46,10 @@
     padding: 10px;
     height: 60px;
     width: 60px;
-    color: #2e81f4;
+    color: var(--bg-secondary);
 }
 
-.header_left > svg:hover{
+.header_left > svg:hover {
     cursor: pointer;
 }
 
@@ -59,27 +59,27 @@
     padding: 10px 10px;
     border-radius: 30px;
     cursor: pointer;
-    color: #2e81f4;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    color: var(--bg-secondary);
+    box-shadow: 0 2px 8px var(--ol-shadow);
 }
 
-.header_option > .MuiSvgIcon-root{
+.header_option > .MuiSvgIcon-root {
     width: 40px;
     height: 40px;
 }
 
-.header_option:hover{
-    background-color: rgb(18, 70, 83);
+.header_option:hover {
+    background-color: var(--btn-hover);
     border-bottom: none;
     
 }
 
-.header_option:hover > .MuiSvgIcon-root{
+.header_option:hover > .MuiSvgIcon-root {
     color: white;
 }
 
-.header_option-active > .MuiSvgIcon-root{
-    color: #2e81f4;
+.header_option-active > .MuiSvgIcon-root {
+    color: var(--bg-secondary);
 }
 
 
@@ -88,13 +88,13 @@
     padding: 10px;
     display: flex;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    color: #2e81f4;
+    box-shadow: 0 2px 8px var(--ol-shadow);
+    color: var(--bg-secondary);
 }
 
 .header_info:hover{
     color: white;
-    background-color: rgb(18, 70, 83);
+    background-color: var(--btn-hover);
     cursor: pointer;
 }
 
@@ -102,7 +102,7 @@
     margin-left: 10px;
 }
 
-.header_right{
+.header_right {
     justify-content: space-between;
     display: flex;
     margin: 0 auto;
