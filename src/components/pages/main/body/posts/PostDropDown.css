@@ -1,0 +1,22 @@
+.postDropDown {
+    position: absolute;
+    transform: translateX(-45%);
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+    background-color: white;
+    right: -80px;
+    top: 85%;
+    width: 80px;
+}
+
+.postDropDown_item {
+    color: var(--bg-secondary);
+    padding: 8px;
+}
+
+.postDropDown_item:hover {
+    background-color: var(--btn-hover);
+    color: white;
+    cursor: pointer;
+}

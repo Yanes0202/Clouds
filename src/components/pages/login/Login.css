@@ -1,138 +1,31 @@
 .login {
-    display: flex;
+    display: grid;
     place-items: center;
-    flex-direction: column;
-    align-items: center;
     height: 100vh;
-    color: var(--bg-secondary);
-    font-weight: 800;
-}
-
-.login > h1 {
-    margin-top: 5rem;
 }
 
 .login > div {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+    color: #2e81f4;
 }
 
-.login > .login_logo > .MuiSvgIcon-root {
-    color: #aecbf4;
+.login > div > .MuiSvgIcon-root {
     object-fit: contain;
-    height: 550px;
-    width: 550px;
+    height: 150px;
+    width: 150px;
 }
 
-.login_logIn {
-    position: fixed;
-    top: 35vh;
-}
-
-.login_logIn > button {
-    margin-top: 25px;
-    background-color: var(--bg-secondary);
-    color: white;
-}
-
-.login_logIn > button:hover {
-    background-color: var(--btn-hover);
-    color: white;
-}
-
-.login_form > button {
-    margin: 10px;
-    width: 100px;
-    background-color: var(--bg-secondary);
+.login > button {
+    width: 300px;
+    
+    background-color: #2e81f4;
     color: white;
     font-weight: 800;
 }
 
-.login_form > button:hover {
-    background-color: var(--btn-hover);
+.login > button:hover {
+    background-color: rgb(18, 70, 83);
     color: white;
-}
-
-.login_form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px
-}
-
-.login_form > input{
-    display: flex;
-    align-items: center;
-    background-color: white;
-    padding: 10px;
-    margin-left: 10px;
-    border-radius: 999px;
-    height: 20px;
-}
-
-.logIn_button {
-    display: flex;
-    align-items: center;
-    background-color: var(--bg-secondary);
-    padding: 10px;
-    margin-left: 10px;
-    border-radius: 999px;
-    position: fixed;
-    top: -20vh;
-    left: 28vh;
-}
-
-.logIn_button > button {
-    background-color: var(--bg-secondary);
-    border: none;
-    color: white;
-    font-weight: 800;
-}
-
-.logIn_button:hover {
-    background-color: var(--btn-hover);
-}
-
-.login_singIn {
-    visibility: hidden;
-}
-
-#one, 
-#two,
-.login_logIn {
-transition: all 1s ease;
-}
-
-#one {
-    visibility: 0;
-}
-
-#two {
-    position: fixed;
-}
-
-@keyframes appearing {
-    from {
-        display: block;
-        opacity: 0;
-        transform: translateX(150%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0%);
-    }
-}
-
-@keyframes disappearing {
-    from {
-        opacity: 1;
-        transform: translateX(0%);
-    }
-    to {
-        opacity: 0;
-        transform: translateX(-150%);
-        visibility: hidden;
-    }
 }

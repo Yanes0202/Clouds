@@ -26,6 +26,7 @@
     margin: 0 10px;
     background-color: var(--ip-bg);
     border-radius: 999px;
+    width: 100%;
 }
 
 .popup_button:hover {
