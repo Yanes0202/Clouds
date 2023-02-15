@@ -1,12 +1,11 @@
 .comment {
     display: flex;
     flex-direction: column;
-    padding-top: 15px;
-    padding-left: 8px;
 }
 
 .comment_top {
-    display: flex;   
+    display: flex;
+    margin-bottom: 10px; 
 }
 
 .comment_top > .MuiAvatar-root {
@@ -20,6 +19,8 @@
 
 .comment_base {
     margin-left: 5px;
+    margin-right: 10px;
+    max-width: 80%;
 }
 
 .comment_body {
@@ -48,9 +49,8 @@
 
 .comment_create_reply {
     display: flex;
-    padding-top: 8px;
     padding-left: 8px;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
     align-items: center;
 }
 
@@ -70,4 +70,17 @@
 
 .comment_create_reply > .MuiAvatar-root:hover {
     filter: brightness(1.1);
+}
+
+.comment_more {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    border-radius: 100%;
+    border: none;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    align-items: center;
 }

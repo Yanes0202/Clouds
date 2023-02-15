@@ -1,10 +1,10 @@
 import "./CreatePostPopUp.css";
-import { useStateValue } from "../../../../context/StateProvider";
-import React, { useRef, useState } from "react";
+import { useStateValue } from "../../../../../context/StateProvider";
+import React, { useState } from "react";
 import { serverTimestamp, addDoc, collection } from "firebase/firestore";
-import db from "../../../../context/firebase";
+import db from "../../../../../context/firebase";
 import Avatar from '@mui/material/Avatar';
-import activity from "../../../../context/activity";
+import activity from "../../../../../context/activity";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 

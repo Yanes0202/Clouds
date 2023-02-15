@@ -1,0 +1,21 @@
+.commentDropDown {
+    position: absolute;
+    transform: translateX(-45%);
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
+    background-color: white;
+    right: 40%;
+    top: 60%;
+}
+
+.commentDropDown_item {
+    color: var(--bg-secondary);
+    padding: 8px;
+}
+
+.commentDropDown_item:hover {
+    background-color: var(--btn-hover);
+    color: white;
+    cursor: pointer;
+}

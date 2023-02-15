@@ -23,7 +23,7 @@ function UsersList() {
       setUsers(snap.docs.map(doc => ({id: doc.id, data: doc.data()})))
     ))
     
-  });
+  },[]);
 
   return (
     <div className="users">

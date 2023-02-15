@@ -5,14 +5,14 @@ import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Comment from './Comment';
+import Comment from './comments/Comment';
 import db from "../../../../context/firebase";
-import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc, getDoc, doc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
 import "./Post.css";
 import activity from "../../../../context/activity";
 import parse from "html-react-parser";
-import PostDropDown from "./PostDropDown.js";
+import PostDropDown from "./dropDown/PostDropDown.js";
 
 function Post({postId, profilePic, image, userName, timeStamp, userId, message}) {
 
@@ -24,6 +24,9 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
   const [configDropDown, setConfigDropDown] = useState(false);
   const [dropDownAvailable, setDropDownAvailable] = useState(false);
 
+  const usersCollectionName = "users";
+  const commentsCollectionName = "comments";
+
   const d = new Date(timeStamp?.toDate());
   const minutes= String(d.getMinutes()).padStart(2, '0');
 
@@ -34,15 +37,54 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
     +" "+[d.getHours(),
     minutes].join(":");
 
+    /* Get userData from user db by comment id */
+    const getUserDataByCommentId = (comments) => {
+      return Promise.all(
+        comments.map(async (comment) => {
+          const commentData = comment.data();
+          var userData = await getDoc(doc(db,usersCollectionName,commentData.userId));
+  
+          if(!userData.exists()){
+            console.log("User doesn't exist in database");
+          }else{
+            return {
+              id: comment.id,
+              userId: userData.id,
+              userData: userData.data(),
+              data: commentData
+            };
+          }
+        })
+      )
+    }
+
   
   useEffect(() => {
-    /* Check if post is created by you */
+    /* Check if post is created by current user */
     if(userId === user.uid) { setDropDownAvailable(true) }
+
+    console.log("test2")
     /* Connect to DB to get Comments */
-    const q = query(collection(db,'comments'), orderBy("timeStamp","asc"));
-    onSnapshot(q,(snapshot) =>(
-      setComments(snapshot.docs.map(doc => ({id: doc.id, data: doc.data()})))
-    ))
+    let cancelPreviousPromiseChain = undefined;
+    const q = query(collection(db, commentsCollectionName), orderBy("timeStamp", "asc"));
+
+     onSnapshot(q,(snapshot) => {
+      if (cancelPreviousPromiseChain) cancelPreviousPromiseChain();
+
+      let cancelled = false;
+
+      cancelPreviousPromiseChain = () => cancelled = true;
+
+      getUserDataByCommentId(snapshot.docs)
+      .then((result) =>{
+        if (cancelled) return;
+        setComments(result);
+      })
+      .catch((error) => {
+        if(cancelled) return;
+        console.log(error);
+      });
+    });
   },[]);
 
   /* Create Comment method */
@@ -67,15 +109,15 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
   };
   
   /* Filter Comments to get post Comments */
-  const postComments= (id)=>{
-    return rootComments.filter((comment) => comment.data.postId === id);
+  const postComments= ()=>{
+    return comments.filter((comment) => comment.data.postId === postId);
   }
 
   /* Filter Comments to get root Comments */
-  const rootComments = comments.filter((comments) => comments.data.parentId === "null");
+  const rootComments = postComments().filter((comments) => comments.data.parentId === "null");
 
   /* Filter Comments to get reply Comments */
-  const replyComments = comments.filter((comments) => comments.data.parentId !== "null");
+  const replyComments = postComments().filter((comments) => comments.data.parentId !== "null");
 
   /* Togle Comment Div */
   const toggleComments = ()=>{
@@ -171,15 +213,16 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
 
       {showComments ?
         <div className="post_comments">
-          {postComments(postId).map(comment => (
+          {rootComments.map((comment) => (
             <Comment
               key={comment.id}
               commentId={comment.id}
               postId={postId}
               timeStamp={comment.data.timeStamp}
               body={comment.data.body}
-              userId={comment.data.userId}
-              parentId={comment.data.parentId}
+              profilePic={comment.userData.profilePic}
+              userName={comment.userData.name}
+              userId = {comment.userId}
               replies={replyComments}
             />
           ))}
