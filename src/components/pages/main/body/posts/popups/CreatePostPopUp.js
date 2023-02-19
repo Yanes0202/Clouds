@@ -98,7 +98,7 @@ function CreatePostPopUp({ onClose, children }){
 
                         <button onClick={createPost} type="submit" className="submit">Publish</button>
                     </form>
-                {input}
+                
 
                     
                 

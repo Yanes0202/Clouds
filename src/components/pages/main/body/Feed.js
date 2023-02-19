@@ -47,7 +47,7 @@ function Feed() {
       let cancelled = false;
 
       cancelPreviousPromiseChain = () => cancelled = true;
-      console.log("test")
+      
       getUserDataByPostId(snapshot.docs)
       .then((result) =>{
         if (cancelled) return;

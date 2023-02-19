@@ -63,7 +63,6 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
     /* Check if post is created by current user */
     if(userId === user.uid) { setDropDownAvailable(true) }
 
-    console.log("test2")
     /* Connect to DB to get Comments */
     let cancelPreviousPromiseChain = undefined;
     const q = query(collection(db, commentsCollectionName), orderBy("timeStamp", "asc"));
@@ -180,7 +179,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
       </div>
 
       <div className="post_bottom">
-        <p>{parse(message)}</p>
+        {parse(message)}
       </div>
       
       {image ? 
