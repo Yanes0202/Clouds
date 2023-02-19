@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./PostDropDown.css";
 import { doc, deleteDoc, query, getDocs, collection, where } from "firebase/firestore";
-import db from "../../../../context/firebase";
-import EditPostPopUp from "./EditPostPopUp";
+import db from "../../../../../context/firebase";
+import EditPostPopUp from "../popups/EditPostPopUp";
 
 function PostDropDown({ onClose, postId, image, message }){
 

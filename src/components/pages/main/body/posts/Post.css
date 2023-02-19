@@ -38,7 +38,6 @@
     border-radius: 100%;
     border: none;
     color: var(--bg-secondary);
-    
 }
 
 .enabled:hover {
@@ -101,12 +100,12 @@
 }
 
 .post_comments {
-    flex-direction: column;
+    padding-top: 10px;
+    padding-left: 10px;
+    position: relative;
 }
 
 .post_create_comment {
-    padding-top: 15px;
-    padding-left: 8px;
     padding-bottom: 10px;
     display: flex;
     align-items: center;

@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Avatar from '@mui/material/Avatar';
 import "./Comment.css";
-import db from "../../../../context/firebase";
-import { collection, serverTimestamp, addDoc, getDoc, doc } from "firebase/firestore";
-import { useStateValue } from "../../../../context/StateProvider";
-import activity from "../../../../context/activity";
+import db from "../../../../../context/firebase";
+import { collection, serverTimestamp, addDoc, } from "firebase/firestore";
+import { useStateValue } from "../../../../../context/StateProvider";
+import activity from "../../../../../context/activity";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CommentDropDown from "./CommentDropDown";
 
-function Comment({replies,commentId,postId,body,timeStamp,userId}) {
+function Comment({ commentId, postId, timeStamp, body, profilePic, userName, userId, replies}) {
   const d = new Date(timeStamp?.toDate());
   const minutes= String(d.getMinutes()).padStart(2, '0');
   const [{user}] = useStateValue();
   const [newComment, setNewComment] = useState("");
-  const [userData, setUserData] = useState([]);
   const [replyForm, setReplyForm] = useState(false);
+  const [dropDownAvailable, setDropDownAvailable] = useState(false);
+  const [ConfigDropDown, setConfigDropDown] = useState(false);
 
   // Format data
   const dformat = [
@@ -21,29 +24,19 @@ function Comment({replies,commentId,postId,body,timeStamp,userId}) {
     d.getFullYear()].join("/")+" "+[d.getHours(),
     minutes].join(":");
 
-    const getUserData = async () => {
-      const docSnap = await getDoc(doc(db, "users", userId));
-      if(docSnap.exists()){
-        setUserData(docSnap.data())
-      }
-    }
-
-  useEffect(() => {
-    getUserData()
-    
-  },[])
-
+    useEffect(() => {
+      /* Check if post is created by current user */
+      if(userId === user.uid) { setDropDownAvailable(true) }
+    },[userId])
 
   // Create Comment
   const createComment = async (e) => {
     e.preventDefault();
 
     const createCommentData = {
-      "userName": user.displayName,
-      "body": "@" + userData.name + " " + newComment,
+      "body": "@" + userName + " " + newComment,
       "timeStamp": serverTimestamp(),
       "parentId": commentId,
-      "profilePic": user.photoURL,
       "postId" : postId,
       "userId" : user.uid
     }
@@ -71,15 +64,21 @@ function Comment({replies,commentId,postId,body,timeStamp,userId}) {
     activity(user.uid);
   }
 
+  const dropDown = () => {
+    if(dropDownAvailable){
+      setConfigDropDown(true)
+    }
+  }
+
   return (
     
     <div className="comment">
       <div className="comment_top">
-        <Avatar src={userData.profilePic} onClick={beOnline}/>
+        <Avatar src={profilePic} onClick={beOnline}/>
         
         <div className="comment_base">
           <div className="comment_body">
-            <h4>{userData.name}</h4>
+            <h4>{userName}</h4>
             <p>{body}</p>
           </div>
 
@@ -92,26 +91,14 @@ function Comment({replies,commentId,postId,body,timeStamp,userId}) {
           </div>
                 
         </div>
+
+        <div className={dropDownAvailable ? "comment_more enabled" : "comment_more disabled" } onClick={dropDown}>
+            <MoreVertIcon/>
+        </div>
+        {ConfigDropDown && <CommentDropDown onClose={setConfigDropDown} commentId={commentId}/>}
+        
             
       </div>
-
-      {getReplies().length > 0 && (
-      <div className="replies">
-        {getReplies().map((reply) => (
-          <Comment 
-          key={reply.id}
-          commentId={reply.id}
-          postId={postId}
-          timeStamp={reply.data.timeStamp}
-          userName={reply.data.userName}
-          body={reply.data.body}
-          userId={reply.data.userId}
-          parentId={reply.data.parentId}
-          profilePic={reply.data.profilePic}
-          replies={replies}
-          />
-        ))}
-        </div>)}
 
       {replyForm ? (
         <div id={commentId} className="comment_create_reply">
@@ -120,13 +107,31 @@ function Comment({replies,commentId,postId,body,timeStamp,userId}) {
             <input 
             value = {newComment}
             onChange = {(e)=>setNewComment(e.target.value)}
-            placeholder="Write Comment"/>
+            placeholder="Reply"/>
             <button type="submit" hidden/>
           </form>
           
         </div>) : null
         }
-      
+
+      {getReplies().length > 0 && (
+        <>
+        {getReplies().map((reply) => (
+          
+          <Comment 
+          key={reply.id}
+          commentId={reply.id}
+          postId={postId}
+          timeStamp={reply.data.timeStamp}
+          body={reply.data.body}
+          profilePic={reply.userData.profilePic}
+          userName={reply.userData.name}
+          userId = {reply.userId}
+          replies={replies}
+          />
+          
+        ))}
+        </>)}
         
     </div>
   )

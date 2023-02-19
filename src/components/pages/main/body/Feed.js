@@ -24,7 +24,7 @@ function Feed() {
         var userData = await getDoc(doc(db,userCollectionName,postData.user));
 
         if(!userData.exists()){
-          console.log("nie ma usera");
+          console.log("User doesn't exist in database");
         }else{
           return {
             id: post.id,
@@ -37,7 +37,7 @@ function Feed() {
     )
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     let cancelPreviousPromiseChain = undefined;
     const q = query(collection(db, postsCollectionName), orderBy("timeStamp", "desc"));
 
@@ -47,7 +47,7 @@ function Feed() {
       let cancelled = false;
 
       cancelPreviousPromiseChain = () => cancelled = true;
-
+      
       getUserDataByPostId(snapshot.docs)
       .then((result) =>{
         if (cancelled) return;

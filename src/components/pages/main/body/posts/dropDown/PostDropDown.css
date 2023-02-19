@@ -5,9 +5,8 @@
     border-radius: 15px;
     box-shadow: 0 2px 8px rgb(0 0 0 / 20%);
     background-color: white;
-    right: -80px;
-    top: 85%;
-    width: 80px;
+    left: 100%;
+    top: 75%;
 }
 
 .postDropDown_item {

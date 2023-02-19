@@ -17,13 +17,11 @@ function Login() {
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
       .then((result) => {
-        
         const docRef = doc(db, "users", result.user.uid);
         // check if user exist
         getDoc(docRef).then((snap) => {
           // if not
           if (!snap.exists()){
-            
             const postData = {
               name: result.user.displayName,
               logTimeStamp: serverTimestamp(),
@@ -32,11 +30,9 @@ function Login() {
             }
             //create user
             setDoc(doc(db, "users",result.user.uid),postData); 
-          
+            activity(result.user.uid);
           }
         });
-        
-        activity(result.user.uid);
 
         dispatch({
           type: actionTypes.SET_USER,
