@@ -22,7 +22,7 @@ function Feed() {
       posts.map(async (post) => {
         const postData = post.data();
         var userData = await getDoc(doc(db,userCollectionName,postData.user));
-
+        
         if(!userData.exists()){
           console.log("User doesn't exist in database");
         }else{
@@ -80,7 +80,8 @@ function Feed() {
     <div className="feed">
         <PostCreator/>
         
-        {posts.map((post) => (  
+        {posts.map((post) => ( 
+           
             <Post
               key={post.id}
               postId={post.id}
@@ -90,6 +91,7 @@ function Feed() {
               userId = {post.userId}
               userName={post.userData.name}
               image={post.data.image}
+              likes={post.data.likes}
             />
         ))
         }

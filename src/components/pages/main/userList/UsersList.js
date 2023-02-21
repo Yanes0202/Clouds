@@ -12,6 +12,7 @@ import { useStateValue } from "../../../context/StateProvider";
 function UsersList() {
   const [users, setUsers] = useState([]);
   const[{user}] = useStateValue();
+  const contactsTable = "contacts";
 
   // Filter to show users without current user
   const usersFilter = users.filter((u)=> {
@@ -19,7 +20,7 @@ function UsersList() {
   }) 
 
   useEffect(() => {
-    onSnapshot(collection(db,"users"), (snap) =>(
+    onSnapshot(collection(db,contactsTable), (snap) =>(
       setUsers(snap.docs.map(doc => ({id: doc.id, data: doc.data()})))
     ))
     

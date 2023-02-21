@@ -28,6 +28,7 @@
     flex-direction: column;
     padding-left: 10px;
     padding-right: 15px;
+    padding-bottom: 8px;
     border-radius: 18px;
     background-color: rgba(42, 46, 46, 0.63);
 }
@@ -35,7 +36,8 @@
 .comment_option {
     display: flex;
     font-size: 12px;
-    padding-left: 10px;
+    align-items: center;
+    column-gap: 5px;
 }
 
 .option_buttons {
@@ -83,4 +85,62 @@
     margin-right: 10px;
     margin-bottom: 10px;
     align-items: center;
+}
+
+.comment_edit_form {
+    display: flex;
+    align-items: center;
+}
+
+.comment_edit_form > input {
+    outline-width: 0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background-color: #eff2f5;
+}
+
+.comment_edit_form > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    border-radius: 99%;
+    margin-left: 3px;
+}
+
+.comment_edit_form > button:hover {
+    cursor: pointer;
+    
+    filter: brightness(1.1);
+}
+
+.save {
+    color: green;
+    filter: brightness(75%);
+}
+
+.delete {
+    color: red;
+    filter: brightness(75%);
+}
+
+.like {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.like > svg {
+    width: 22px;
+    height: 22px;
+    margin-left: 10px;
+}
+
+.likes {
+    font-weight: bold;
+    font-size: 15px;
 }

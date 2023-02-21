@@ -1,4 +1,5 @@
 import "./HeaderDropDown.css";
+import { getAuth, signOut } from "firebase/auth";
 import { actionTypes } from "../../../context/reducer";
 import { useStateValue } from "../../../context/StateProvider";
 
@@ -10,6 +11,17 @@ function HeaderDropDown({ onClose }){
 
     // LOGOUT USER
     const logOut= ()=> {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            dispatch({
+                type: actionTypes.SET_USER,
+                user: null        
+            });
+            document.location.reload();
+            // TODO: ADD POPUP WITH SUCCESS FULL LOG OUT
+        }).catch((error) => {
+            console.error(error);
+        })
         dispatch({
             type: actionTypes.SET_USER,
             user: null
