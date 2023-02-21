@@ -22,10 +22,11 @@ function CreatePostPopUp({ onClose, children }){
         e.preventDefault();
 
         const postData = {
-            user: user.uid,
-            timeStamp: serverTimestamp(),
-            message: input,
-            image: imageURL,
+            "user": user.uid,
+            "timeStamp": serverTimestamp(),
+            "message": input,
+            "image": imageURL,
+            "likes": []
         }
         if(input){
             await addDoc(collection(db, "posts"),postData);

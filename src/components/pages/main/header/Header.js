@@ -43,12 +43,15 @@ function Header() {
                 <Avatar src={user.photoURL}/>
                 <h4>{user.displayName}</h4>
             </div>
+            {/*
             <div className="header_option" onClick={beOnline}>
                 <MapsUgcOutlinedIcon/>
             </div>
+            
             <div className="header_option" onClick={beOnline}>
                 <NotificationsActiveIcon fontSize="large"/>
             </div>
+            */}
             <div className="header_option" onClick={() => { setDropDown(!dropDown)}}>
                 <ExpandMoreIcon fontSize="large" />
             </div>

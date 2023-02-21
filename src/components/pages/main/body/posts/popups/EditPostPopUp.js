@@ -20,10 +20,11 @@ function EditPostPopUp({ postId, children, image, message, closeDropDown, onClos
         e.preventDefault();
 
         const postData = {
-            user: user.uid,
-            timeStamp: serverTimestamp(),
-            message: input,
-            image: imageURL,
+            "user": user.uid,
+            "timeStamp": serverTimestamp(),
+            "message": input,
+            "image": imageURL,
+            "likes": []
         }
 
         if(input){
@@ -79,7 +80,7 @@ function EditPostPopUp({ postId, children, image, message, closeDropDown, onClos
 
                     <CKEditor
                     className = "popup_post_create_editor"
-                    data = {input}
+                    data = { input }
                     editor = { Editor }
                     onChange = { handleOnChange }
                     />

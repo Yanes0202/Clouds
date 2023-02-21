@@ -129,3 +129,52 @@
     filter: brightness(1.1);
 }
 
+.hovertext {
+    position: relative;
+  }
+  
+  .hovertext:before {
+    content: attr(data-hover);
+    visibility: hidden;
+    opacity: 0;
+    width: 140px;
+    background-color: var(--btn-hover);
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px 0;
+    transition: opacity 0.5s linear;
+  
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 110%;
+  }
+  
+  .hovertext:hover:before {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .post_informations {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    color: var(--bg-secondary);
+  }
+
+  .informations_center {
+    display: flex;
+    flex: 1 1;
+    justify-content: center;
+  }
+
+  .informations_right {
+    width: 70px;
+  }
+
+  .informations_left {
+    margin-left: 10px;
+  }

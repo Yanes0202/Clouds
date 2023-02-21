@@ -3,12 +3,13 @@ import { doc, deleteDoc } from "firebase/firestore";
 import db from "../../../../../context/firebase";
 
 
-function CommentDropDown({ onClose, commentId, image, message }){
+function CommentDropDown({ onClose, commentId, edit }){
 
     const commentsTable = "comments";
 
     const eventEdit = () => {
-        
+        edit(true);
+        onClose(false);
     }
 
     const eventDelete = async () => {
@@ -24,7 +25,6 @@ function CommentDropDown({ onClose, commentId, image, message }){
             
                 <div className="commentDropDown_item" onClick={eventEdit}>Edit</div>
                 <div className="commentDropDown_item" onClick={eventDelete}>Delete</div>
-            
             
         </div>
     

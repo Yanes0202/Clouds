@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from "react";
 import Avatar from '@mui/material/Avatar';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
-import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Comment from './comments/Comment';
 import db from "../../../../context/firebase";
-import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc, getDoc, doc } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc, getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
 import "./Post.css";
 import activity from "../../../../context/activity";
 import parse from "html-react-parser";
 import PostDropDown from "./dropDown/PostDropDown.js";
 
-function Post({postId, profilePic, image, userName, timeStamp, userId, message}) {
+function Post({postId, profilePic, image, userName, timeStamp, userId, message, likes}) {
 
-  const [comments, setComments] = useState([]);
+  const [ comments, setComments ] = useState([]);
   const [{user}] = useStateValue();
-  const [newComment, setNewComment] = useState("");
-  const [showComments, setShowComments] = useState(false);
-  const [liked, setLiked] = useState(false);
-  const [configDropDown, setConfigDropDown] = useState(false);
-  const [dropDownAvailable, setDropDownAvailable] = useState(false);
+  const [ newComment, setNewComment ] = useState("");
+  const [ showComments, setShowComments ] = useState(false);
+  const [ liked, setLiked ] = useState(false);
+  const [ configDropDown, setConfigDropDown ] = useState(false);
+  const [ dropDownAvailable, setDropDownAvailable ] = useState(false);
 
-  const usersCollectionName = "users";
-  const commentsCollectionName = "comments";
+  const usersTable = "users";
+  const commentsTable = "comments";
+  const postsTable = "posts";
 
   const d = new Date(timeStamp?.toDate());
   const minutes= String(d.getMinutes()).padStart(2, '0');
@@ -42,7 +43,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
       return Promise.all(
         comments.map(async (comment) => {
           const commentData = comment.data();
-          var userData = await getDoc(doc(db,usersCollectionName,commentData.userId));
+          var userData = await getDoc(doc(db,usersTable,commentData.userId));
   
           if(!userData.exists()){
             console.log("User doesn't exist in database");
@@ -58,14 +59,25 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
       )
     }
 
+    // Check if user is already liking
+    const isUserLiking = () => {
+      for (let v of likes) {
+        if (v.id === user.uid) { 
+          return true; 
+        }
+      }  
+      return false;
+    }
   
   useEffect(() => {
     /* Check if post is created by current user */
     if(userId === user.uid) { setDropDownAvailable(true) }
+    
+    if(isUserLiking()) { setLiked(true) }
 
     /* Connect to DB to get Comments */
     let cancelPreviousPromiseChain = undefined;
-    const q = query(collection(db, commentsCollectionName), orderBy("timeStamp", "asc"));
+    const q = query(collection(db, commentsTable), orderBy("timeStamp", "asc"));
 
      onSnapshot(q,(snapshot) => {
       if (cancelPreviousPromiseChain) cancelPreviousPromiseChain();
@@ -91,24 +103,23 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
     e.preventDefault();
 
     const createCommentData = {
-      "userName": user.displayName,
       "body": newComment,
       "timeStamp": serverTimestamp(),
       "parentId": "null",
-      "profilePic": user.photoURL,
       "postId" : postId,
-      "userId" : user.uid
+      "userId" : user.uid,
+      "likes" : []
     }
 
     if(newComment){
-      await addDoc(collection(db, "comments"),createCommentData);
+      await addDoc(collection(db, commentsTable),createCommentData);
 
       setNewComment("")
     }
   };
   
   /* Filter Comments to get post Comments */
-  const postComments= ()=>{
+  const postComments = ()=>{
     return comments.filter((comment) => comment.data.postId === postId);
   }
 
@@ -142,7 +153,38 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
   }
 
   /* Toggling like */
-  const toggleLike = () => { setLiked(!liked);}
+  const toggleLike = () => {
+    
+    if(isUserLiking()){
+      var filtered = likes.filter(like => like.id !== user.uid);
+
+      var data = {
+        likes: filtered
+      }
+      
+      setDoc(doc(db,postsTable,postId), data, {merge: true}).then(()=>{setLiked(false)})
+
+    } else {
+      var array = likes;
+      array.push({
+        name: user.displayName,
+        id: user.uid
+      })
+
+      var data = {
+        likes: array
+      }
+      
+    setDoc(doc(db,postsTable,postId), data, {merge: true}).then(()=>{setLiked(true)})
+  }
+  }
+
+  const getLikesName = () => {
+    var string = "";    
+    likes.map(a=>{string += a.name + "\n"});
+    
+    return string;
+  }
 
   /* Be visible as online */
   const beOnline = () => {
@@ -190,25 +232,41 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
         )
         : null
       }
-      
-      <div className="post_actions" style={{borderBottom: showComments ? "1px solid lightgray" : "none"}} >
-
-        <div className="post_action left" onClick={toggleLike} onMouseEnter={likeHover} >
-          {liked ? <ThumbUpRoundedIcon/> : <ThumbUpOutlinedIcon/> }
-          <p>Like</p>
+      <div className="post_informations">
+        
+        <div className="informations_left">
+          <p className="hovertext " data-hover={getLikesName()}>{likes.length} Likes</p>
+        </div>
+        
+        <div className="informations_center">
+          <p> {postComments().length} Comments</p>
         </div>
 
-        <div className="post_action" onClick={()=>{toggleComments();}}>
-          <CommentOutlinedIcon />
-          <p>Comment</p>
-        </div>
+        <div className="informations_right">
 
-        <div className="post_action right" onClick={beOnline} onMouseEnter={shareHover}>
-          <ShareOutlinedIcon />
-          <p>Share</p>
         </div>
 
       </div>
+
+        <div className="post_actions" style={{borderBottom: showComments ? "1px solid lightgray" : "none"}} >
+
+          <div className="post_action left" onClick={toggleLike} onMouseEnter={likeHover} >
+            {liked ? <ThumbUpRoundedIcon/> : <ThumbUpOutlinedIcon/> }
+            <p>Like</p>
+          </div>
+
+          <div className="post_action" onClick={()=>{toggleComments();}}>
+            <CommentOutlinedIcon />
+           <p>Comment</p>
+          </div>
+
+          <div className="post_action right" onClick={beOnline} onMouseEnter={shareHover}>
+           <ShareOutlinedIcon />
+           <p>Share</p>
+          </div>
+
+        </div>
+      
 
       {showComments ?
         <div className="post_comments">
@@ -222,6 +280,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message})
               profilePic={comment.userData.profilePic}
               userName={comment.userData.name}
               userId = {comment.userId}
+              likes = {comment.data.likes}
               replies={replyComments}
             />
           ))}
