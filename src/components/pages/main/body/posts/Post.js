@@ -24,7 +24,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message, 
   const [ configDropDown, setConfigDropDown ] = useState(false);
   const [ dropDownAvailable, setDropDownAvailable ] = useState(false);
 
-  const usersTable = "users";
+  const contactsTable = "contacts";
   const commentsTable = "comments";
   const postsTable = "posts";
 
@@ -43,7 +43,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message, 
       return Promise.all(
         comments.map(async (comment) => {
           const commentData = comment.data();
-          var userData = await getDoc(doc(db,usersTable,commentData.userId));
+          var userData = await getDoc(doc(db,contactsTable,commentData.userId));
   
           if(!userData.exists()){
             console.log("User doesn't exist in database");

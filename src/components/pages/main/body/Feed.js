@@ -13,15 +13,15 @@ function Feed() {
   const [ loading, setLoading ] = useState(true);
   const [{user}] = useStateValue();
 
-  const userCollectionName = "users";
-  const postsCollectionName = "posts";
+  const contactsTable = "contacts";
+  const postsTable = "posts";
 
   // Get post user data by post user id
   const getUserDataByPostId = (posts) => {
     return Promise.all(
       posts.map(async (post) => {
         const postData = post.data();
-        var userData = await getDoc(doc(db,userCollectionName,postData.user));
+        var userData = await getDoc(doc(db,contactsTable,postData.user));
         
         if(!userData.exists()){
           console.log("User doesn't exist in database");
@@ -39,7 +39,7 @@ function Feed() {
 
   useEffect(() => {
     let cancelPreviousPromiseChain = undefined;
-    const q = query(collection(db, postsCollectionName), orderBy("timeStamp", "desc"));
+    const q = query(collection(db, postsTable), orderBy("timeStamp", "desc"));
 
      onSnapshot(q,(snapshot) => {
       if (cancelPreviousPromiseChain) cancelPreviousPromiseChain();

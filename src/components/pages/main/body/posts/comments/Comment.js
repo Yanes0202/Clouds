@@ -205,6 +205,7 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
           userName={reply.userData.name}
           userId = {reply.userId}
           replies={replies}
+          likes = {reply.data.likes}
           />
           
         ))}
