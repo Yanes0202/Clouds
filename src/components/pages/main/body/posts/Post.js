@@ -7,14 +7,14 @@ import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Comment from './comments/Comment';
 import db from "../../../../context/firebase";
-import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc, getDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { collection, onSnapshot, orderBy, query, serverTimestamp, addDoc, getDoc, doc, setDoc } from "firebase/firestore";
 import { useStateValue } from "../../../../context/StateProvider";
 import "./Post.css";
 import activity from "../../../../context/activity";
 import parse from "html-react-parser";
 import PostDropDown from "./dropDown/PostDropDown.js";
 
-function Post({postId, profilePic, image, userName, timeStamp, userId, message, likes}) {
+function Post({postId, profilePic, image, userName, timeStamp, userId, body, likes}) {
 
   const [ comments, setComments ] = useState([]);
   const [{user}] = useStateValue();
@@ -152,46 +152,39 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message, 
     }
   }
 
-  /* Toggling like */
+  // Toggling like 
   const toggleLike = () => {
-    
-    if(isUserLiking()){
+    if(isUserLiking()) {
       var filtered = likes.filter(like => like.id !== user.uid);
-
-      var data = {
-        likes: filtered
-      }
+      var filteredData = { likes: filtered };
       
-      setDoc(doc(db,postsTable,postId), data, {merge: true}).then(()=>{setLiked(false)})
-
+      setDoc(doc(db,postsTable,postId), filteredData, {merge: true}).then(()=>{setLiked(false)});
     } else {
       var array = likes;
       array.push({
         name: user.displayName,
         id: user.uid
       })
-
-      var data = {
-        likes: array
-      }
+      var enrichedData = { likes: array };
       
-    setDoc(doc(db,postsTable,postId), data, {merge: true}).then(()=>{setLiked(true)})
-  }
+      setDoc(doc(db,postsTable,postId), enrichedData, {merge: true}).then(()=>{setLiked(true)})
+    }
   }
 
+  // Getting Names of users that gave like
   const getLikesName = () => {
     var string = "";    
-    likes.map(a=>{string += a.name + "\n"});
+    likes.map(a=>{return string += a.name + "\n"});
     
     return string;
   }
 
-  /* Be visible as online */
+  // Be visible as online 
   const beOnline = () => {
     activity(user.uid);
   }
 
-  /* Show dropDown */
+  // Show dropDown 
   const dropDown = () => {
     if(dropDownAvailable){
       setConfigDropDown(true)
@@ -216,12 +209,12 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message, 
         <div className={dropDownAvailable ? "post_top_more enabled" : "post_top_more disabled" } onClick = {dropDown}>
           <MoreVertIcon/>
         </div>
-        {configDropDown && <PostDropDown onClose={setConfigDropDown} postId={postId} image={image} message={message}/>}
+        {configDropDown && <PostDropDown onClose={setConfigDropDown} postId={postId} image={image} body={body}/>}
 
       </div>
 
       <div className="post_bottom">
-        {parse(message)}
+        {parse(body)}
       </div>
       
       {image ? 
@@ -235,7 +228,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, message, 
       <div className="post_informations">
         
         <div className="informations_left">
-          <p className="hovertext " data-hover={getLikesName()}>{likes.length} Likes</p>
+          <p className={likes.length === 0 ? null : "hovertext"} data-hover={getLikesName()}>{likes.length} Likes</p>
         </div>
         
         <div className="informations_center">

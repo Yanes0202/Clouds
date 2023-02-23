@@ -8,27 +8,28 @@ import activity from "../../../../../context/activity";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from 'ckeditor5-custom-build/build/ckeditor';
 
-function EditPostPopUp({ postId, children, image, message, closeDropDown, onClose }){
+function EditPostPopUp({ postId, children, image, body, closeDropDown, onClose }){
     const[{user}] = useStateValue();
-    const [input, setInput] = useState(message);
+    const [input, setInput] = useState(body);
     const [imageURL,setImageURL] = useState(image);
     const postTable = "posts";
 
 
     //Edit post
-    const createPost = async (e) => {
+    const editPost = async (e) => {
         e.preventDefault();
 
         const postData = {
-            "user": user.uid,
+            "userId": user.uid,
             "timeStamp": serverTimestamp(),
-            "message": input,
+            "body": input,
             "image": imageURL,
             "likes": []
         }
 
         if(input){
             await setDoc(doc(db, postTable,postId),postData);
+            beOnline();
             setInput("");
             setImageURL("");
             closePopUp();
@@ -74,7 +75,7 @@ function EditPostPopUp({ postId, children, image, message, closeDropDown, onClos
                 </div>
                 <div className="popup_post_create">
                     <div className="popup_user_info">
-                    <Avatar src={user.photoURL} onClick={beOnline} />
+                    <Avatar src={user.photoURL} />
                     <h5>{user.displayName}</h5>
                     </div>
 
@@ -94,7 +95,7 @@ function EditPostPopUp({ postId, children, image, message, closeDropDown, onClos
                         placeholder="Image URL"
                         />
 
-                        <button onClick={createPost} type="submit" className="submit">Publish</button>
+                        <button onClick={editPost} type="submit" className="submit">Publish</button>
                     </form>
                 </div>
                 

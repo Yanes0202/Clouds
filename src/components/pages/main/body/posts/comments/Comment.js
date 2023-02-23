@@ -172,7 +172,7 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
         <div className={dropDownAvailable ? "comment_more enabled" : "comment_more disabled" } onClick={dropDown}>
             <MoreVertIcon/>
         </div>
-        {configDropDown && <CommentDropDown onClose={setConfigDropDown} commentId={commentId} edit={setEdit} />}
+        {configDropDown && <CommentDropDown replies={replies} onClose={setConfigDropDown} commentId={commentId} edit={setEdit} />}
         
             
       </div>

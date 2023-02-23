@@ -17,32 +17,30 @@ function Login() {
     // LOGIN AND ADDING USER TO DB
     const signIn = () => {
       setPersistence(auth, browserSessionPersistence)
-        .then(() => {
+        .then(async() => {
           const provider = new GoogleAuthProvider();
           return signInWithPopup(auth, provider)
             .then((result) => {
-              const docRef = doc(db, usersTable, result.user.uid);
-              // check if user exist
-              getDoc(docRef).then((snap) => {
-                // if not
+              getDoc(doc(db, usersTable, result.user.uid)).then((snap) => {
                 if (!snap.exists()) {
-                  const signInData = {
+                  const usersData = {
                     name: result.user.displayName,
-                    logTimeStamp: serverTimestamp(),
                     password: "",
-                    profilePic: result.user.photoURL
                   }
-
+                  setDoc(doc(db, usersTable,result.user.uid),usersData).then(activity(result.user.uid));
+                } else 
+                  activity(result.user.uid);
+              });
+              getDoc(doc(db, contactsTable, result.user.uid)).then((snap) => {
+                if (!snap.exists()) {
                   const contactsData = {
                     name: result.user.displayName,
                     logTimeStamp: serverTimestamp(),
                     profilePic: result.user.photoURL
                   }
-                  //create user
-                  setDoc(doc(db, usersTable,result.user.uid),signInData);
-                  setDoc(doc(db,contactsTable,result.user.uid),contactsData);
-                  activity(result.user.uid);
-                }
+                  setDoc(doc(db,contactsTable,result.user.uid),contactsData).then(activity(result.user.uid));
+                } else
+                activity(result.user.uid);
               });
               dispatch({
                 type: actionTypes.SET_USER,

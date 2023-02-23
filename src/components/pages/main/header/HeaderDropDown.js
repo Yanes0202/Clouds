@@ -17,7 +17,6 @@ function HeaderDropDown({ onClose }){
                 type: actionTypes.SET_USER,
                 user: null        
             });
-            document.location.reload();
             // TODO: ADD POPUP WITH SUCCESS FULL LOG OUT
         }).catch((error) => {
             console.error(error);

@@ -3,7 +3,7 @@ import { doc, deleteDoc } from "firebase/firestore";
 import db from "../../../../../context/firebase";
 
 
-function CommentDropDown({ onClose, commentId, edit }){
+function CommentDropDown({ onClose, commentId, edit, replies }){
 
     const commentsTable = "comments";
 
@@ -14,6 +14,7 @@ function CommentDropDown({ onClose, commentId, edit }){
 
     const eventDelete = async () => {
         await deleteDoc(doc(db,commentsTable,commentId));
+        onClose(false);
     }
 
     return (
