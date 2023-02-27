@@ -10,9 +10,9 @@ function UsersList({ id, name, logTimeStamp, profilePic }) {
     
     if (logTimeStamp ) {
       var date = new Date();
-
+      var TEN_MIN = 600000;
       var FIVE_MIN = 300000;
-      if (date - new Date(logTimeStamp?.toDate()) > 600000) {
+      if (date - new Date(logTimeStamp?.toDate()) > TEN_MIN) {
         document.getElementById(id).style.backgroundColor="red";
       } else if(date - new Date(logTimeStamp?.toDate()) > FIVE_MIN){
         document.getElementById(id).style.backgroundColor="yellow";

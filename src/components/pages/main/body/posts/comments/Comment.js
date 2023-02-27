@@ -12,7 +12,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 
-function Comment({ commentId, postId, timeStamp, body, profilePic, userName, userId, replies, likes}) {
+function Comment({ commentId, postId, timeStamp, body, profilePic, userName, userId, likes}) {
   const d = new Date(timeStamp?.toDate());
   const minutes= String(d.getMinutes()).padStart(2, '0');
   const [{user}] = useStateValue();
@@ -58,7 +58,6 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
     const createCommentData = {
       "body": "@" + userName + " " + newComment,
       "timeStamp": serverTimestamp(),
-      "parentId": commentId,
       "postId" : postId,
       "userId" : user.uid,
       "likes" : []
@@ -71,11 +70,6 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
     }
     
   };
-
-  // Filter Comments to get replied comments
-  function getReplies() {
-    return replies.filter((comments) => comments.data.parentId === commentId);
-  }
 
   // Toggle Reply Form
   const toggleReplyForm = () => {
@@ -114,11 +108,11 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
     if(isUserLiking()){
       var filtered = likes.filter(like => like.id !== user.uid);
 
-      var data = {
+      var filteredData = {
         likes: filtered
       }
       
-      setDoc(doc(db,commentsTable,commentId), data, {merge: true}).then(()=>{setLiked(false)})
+      setDoc(doc(db,commentsTable,commentId), filteredData, {merge: true}).then(()=>{setLiked(false)})
 
     } else {
       var array = likes;
@@ -172,7 +166,7 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
         <div className={dropDownAvailable ? "comment_more enabled" : "comment_more disabled" } onClick={dropDown}>
             <MoreVertIcon/>
         </div>
-        {configDropDown && <CommentDropDown replies={replies} onClose={setConfigDropDown} commentId={commentId} edit={setEdit} />}
+        {configDropDown && <CommentDropDown onClose={setConfigDropDown} commentId={commentId} edit={setEdit} />}
         
             
       </div>
@@ -190,26 +184,6 @@ function Comment({ commentId, postId, timeStamp, body, profilePic, userName, use
           
         </div>) : null
         }
-
-      {getReplies().length > 0 && (
-        <>
-        {getReplies().map((reply) => (
-          
-          <Comment 
-          key={reply.id}
-          commentId={reply.id}
-          postId={postId}
-          timeStamp={reply.data.timeStamp}
-          body={reply.data.body}
-          profilePic={reply.userData.profilePic}
-          userName={reply.userData.name}
-          userId = {reply.userId}
-          replies={replies}
-          likes = {reply.data.likes}
-          />
-          
-        ))}
-        </>)}
         
     </div>
   )

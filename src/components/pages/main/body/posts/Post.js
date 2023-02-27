@@ -105,7 +105,6 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, body, lik
     const createCommentData = {
       "body": newComment,
       "timeStamp": serverTimestamp(),
-      "parentId": "null",
       "postId" : postId,
       "userId" : user.uid,
       "likes" : []
@@ -122,12 +121,6 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, body, lik
   const postComments = ()=>{
     return comments.filter((comment) => comment.data.postId === postId);
   }
-
-  /* Filter Comments to get root Comments */
-  const rootComments = postComments().filter((comments) => comments.data.parentId === "null");
-
-  /* Filter Comments to get reply Comments */
-  const replyComments = postComments().filter((comments) => comments.data.parentId !== "null");
 
   /* Togle Comment Div */
   const toggleComments = ()=>{
@@ -263,7 +256,7 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, body, lik
 
       {showComments ?
         <div className="post_comments">
-          {rootComments.map((comment) => (
+          {postComments().map((comment) => (
             <Comment
               key={comment.id}
               commentId={comment.id}
@@ -274,7 +267,6 @@ function Post({postId, profilePic, image, userName, timeStamp, userId, body, lik
               userName={comment.userData.name}
               userId = {comment.userId}
               likes = {comment.data.likes}
-              replies={replyComments}
             />
           ))}
 

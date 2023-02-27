@@ -17,14 +17,12 @@ function UsersList() {
     onSnapshot(q, (snap) =>(
       setUsers(snap.docs.map(doc => ({id: doc.id, data: doc.data()})))
     ))
-    
   },[]);
   
-
   // Filter to show users without current user
   const usersFilter = users.filter((u)=> {
     return u.id!==user.uid;
-}) 
+  }) 
 
   return (
     <div className="users">
