@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react';
 function App() {
   const [state, dispatch] = useStateValue();
   const [{user}] = useStateValue();
-  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     const auth = getAuth();    
@@ -23,9 +22,7 @@ function App() {
         type: actionTypes.SET_USER,
         user: user
         });
-        setIsLogged(true);
       } else {
-        setIsLogged(false);
       }
     });
   },[user])
@@ -36,7 +33,7 @@ function App() {
   return (
     <div className="app">
       
-      {isLogged ? (
+      {user ? (
         <>
           <Header />
 

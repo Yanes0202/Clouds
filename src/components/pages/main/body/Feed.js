@@ -5,7 +5,6 @@ import Post from "./posts/Post";
 import db from "../../../context/firebase";
 import { collection, onSnapshot, orderBy, query, doc, getDoc } from "firebase/firestore";
 import { useStateValue } from '../../../context/StateProvider';
-import activity from "../../../context/activity";
 
 
 function Feed() {
@@ -21,8 +20,7 @@ function Feed() {
     return Promise.all(
       posts.map(async (post) => {
         const postData = post.data();
-        var userData = await getDoc(doc(db,contactsTable,postData.user));
-        
+        var userData = await getDoc(doc(db,contactsTable,postData.userId))
         if(!userData.exists()){
           console.log("User doesn't exist in database");
         }else{
@@ -36,6 +34,8 @@ function Feed() {
       })
     )
   }
+
+
 
   useEffect(() => {
     let cancelPreviousPromiseChain = undefined;
@@ -61,11 +61,6 @@ function Feed() {
       });
     });
   },[]);
-  
-  // Be visible as online
-  const beOnline = () => {
-    activity(user.uid);
-  }
 
   // Loader
   if(loading){
@@ -79,14 +74,13 @@ function Feed() {
   return (
     <div className="feed">
         <PostCreator/>
-        
+
         {posts.map((post) => ( 
-           
             <Post
               key={post.id}
               postId={post.id}
               profilePic={post.userData.profilePic}
-              message={post.data.message}
+              body={post.data.body}
               timeStamp={post.data.timeStamp}
               userId = {post.userId}
               userName={post.userData.name}

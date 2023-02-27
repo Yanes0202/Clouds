@@ -22,9 +22,9 @@ function CreatePostPopUp({ onClose, children }){
         e.preventDefault();
 
         const postData = {
-            "user": user.uid,
+            "userId": user.uid,
             "timeStamp": serverTimestamp(),
-            "message": input,
+            "body": input,
             "image": imageURL,
             "likes": []
         }
@@ -32,11 +32,13 @@ function CreatePostPopUp({ onClose, children }){
             await addDoc(collection(db, "posts"),postData);
             setInput("");
             setImageURL("");
-            document.body.classList.remove('active-modal') 
+            document.body.classList.remove('active-modal');
+            beOnline();
             onClose(false);
         } else {
             let error = document.getElementById("errorMessage");
             error.style.display = "flex";
+            beOnline();
         }
         
     }
@@ -75,7 +77,7 @@ function CreatePostPopUp({ onClose, children }){
                 </div>
                 <div className="popup_post_create">
                     <div className="popup_user_info">
-                    <Avatar src={user.photoURL} onClick={beOnline} />
+                    <Avatar src={user.photoURL} />
                     <h5>{user.displayName}</h5>
                     </div>
 
