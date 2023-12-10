@@ -5,7 +5,6 @@ import Login from './components/pages/login/Login';
 import { useStateValue } from './components/context/StateProvider';
 import UsersList from './components/pages/main/userList/UsersList';
 import { getAuth } from 'firebase/auth';
-import Teams from './components/pages/main/teams/Teams';
 import { actionTypes } from './components/context/reducer';
 import { useEffect, useState } from 'react';
 
